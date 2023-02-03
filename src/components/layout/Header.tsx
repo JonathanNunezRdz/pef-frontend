@@ -15,15 +15,16 @@ import { useAppMediaQuery } from '@/styles/theme';
 import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
 import { useRouter } from 'next/router';
+import { useLinks } from '@/hooks';
 
 // TODO: continue with appbar example on mui
 
-type Page = {
+export type Page = {
 	route: string;
 	label: string;
 };
 
-const links: Page[] = [
+const generalLinks: Page[] = [
 	{ route: '/', label: 'Analizar' },
 	{ route: '/como_funciona', label: '¿Cómo funciona?' },
 ];
@@ -32,23 +33,26 @@ export default function Header() {
 	// hooks
 	const router = useRouter();
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-	const [anchorElUser, setAnchorElUser] = useState<null | HTMLElement>(null);
+	const [loggedIn, setLoggedIn] = useState(false);
 	const showOnMobile = useAppMediaQuery((theme) =>
 		theme.breakpoints.down('sm')
 	);
+	const links = useLinks(loggedIn);
 
 	// functions
+	const logIn = () => {
+		setLoggedIn(true);
+	};
+	const logOut = () => {
+		setLoggedIn(false);
+	};
 	const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	const handleOpenUserMenu = (event: MouseEvent<HTMLElement>) => {
-		setAnchorElUser(event.currentTarget);
-	};
-	const handleCloseNavMenu = () => {
+	const handleCloseNavMenu = (route: string) => {
+		if (route === 'Iniciar sesión') logIn();
+		if (route === 'Cerrar sesión') logOut();
 		setAnchorElNav(null);
-	};
-	const handleCloseUserMenu = () => {
-		setAnchorElUser(null);
 	};
 	const flexOnMobile = (invert = false) => {
 		if ((showOnMobile && !invert) || (!showOnMobile && invert))
@@ -64,29 +68,25 @@ export default function Header() {
 			enableColorOnDark
 			sx={{ borderRadius: '10px' }}
 		>
-			<Container maxWidth='xl'>
+			<Container maxWidth='md'>
 				<Toolbar disableGutters>
-					{/* only show when not on mobile */}
-					<Link href='/'>
-						<Logo
-							sx={{
-								mr: 2,
-								ml: -1,
-								display: flexOnMobile(true),
-							}}
-						/>
-					</Link>
+					{/* left side logo only on desktop*/}
+					<Box sx={{ flexGrow: showOnMobile ? 1 : 0 }}>
+						<Link href='/' display='inline-block'>
+							<Logo
+								sx={{
+									mt: 1,
+									ml: -1,
+								}}
+							/>
+						</Link>
+					</Box>
 
-					{/* only show when on mobile */}
-					<Box
-						display={flexOnMobile()}
-						sx={{
-							flexGrow: 1,
-						}}
-					>
+					{/* menu links only on mobile */}
+					<Box display={flexOnMobile()}>
 						<IconButton
 							size='large'
-							aria-label='account of current user'
+							aria-label='menu links'
 							arai-controls='menu-appbar'
 							aria-haspopup='true'
 							onClick={handleOpenNavMenu}
@@ -114,10 +114,12 @@ export default function Header() {
 							}}
 						>
 							{/* map through links/pages */}
-							{links.map((link) => (
+							{[...generalLinks, ...links].map((link) => (
 								<MenuItem
-									key={link.route}
-									onClick={handleCloseNavMenu}
+									key={link.label}
+									onClick={() =>
+										handleCloseNavMenu(link.label)
+									}
 									component={NextLinkComposed}
 									to={link.route}
 									selected={isActiveLink(link.route)}
@@ -128,21 +130,7 @@ export default function Header() {
 						</Menu>
 					</Box>
 
-					{/* only show when on mobile */}
-					<Box
-						sx={{
-							mt: 1,
-							mr: 2,
-							flexGrow: 1,
-							display: flexOnMobile(),
-						}}
-					>
-						<Link href='/'>
-							<Logo />
-						</Link>
-					</Box>
-
-					{/* only show when not on mobile */}
+					{/* links only on desktop */}
 					<Box
 						sx={{
 							flexGrow: 1,
@@ -150,7 +138,7 @@ export default function Header() {
 						}}
 					>
 						{/* map through links/pages */}
-						{links.map((link) => (
+						{generalLinks.map((link) => (
 							<Link
 								key={link.route}
 								color='inherit'
@@ -176,41 +164,31 @@ export default function Header() {
 						))}
 					</Box>
 
-					<Box sx={{ flexGrow: 0 }}>
-						<Tooltip title='Open settings'>
-							<IconButton
-								onClick={handleOpenUserMenu}
-								sx={{ p: 0 }}
+					<Box sx={{ flexGrow: 0, display: flexOnMobile(true) }}>
+						{links.map((link) => (
+							<Link
+								key={link.route}
+								color='inherit'
+								href={link.route}
+								underline='none'
+								mx='0.5rem'
+								py='0.25rem'
+								px='0.5rem'
+								textTransform='uppercase'
+								sx={(theme) => ({
+									backgroundColor: isActiveLink(link.route)
+										? theme.palette.primary.dark
+										: theme.palette.primary.main,
+									borderRadius: '10px',
+									':hover': {
+										backgroundColor:
+											theme.palette.primary.dark,
+									},
+								})}
 							>
-								<Avatar
-									alt='User name'
-									src='/static/images/avatar/2.jpg'
-								/>
-							</IconButton>
-						</Tooltip>
-						<Menu
-							sx={{ mt: '45px' }}
-							id='menu-appbar'
-							anchorEl={anchorElUser}
-							anchorOrigin={{
-								vertical: 'top',
-								horizontal: 'right',
-							}}
-							keepMounted
-							transformOrigin={{
-								vertical: 'top',
-								horizontal: 'right',
-							}}
-							open={Boolean(anchorElUser)}
-							onClose={handleCloseUserMenu}
-						>
-							{/* map through user menu items */}
-							<MenuItem onClick={handleCloseUserMenu}>
-								<Typography textAlign='center'>
-									Account
-								</Typography>
-							</MenuItem>
-						</Menu>
+								{link.label}
+							</Link>
+						))}
 					</Box>
 				</Toolbar>
 			</Container>

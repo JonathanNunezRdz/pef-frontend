@@ -1,18 +1,9 @@
-import {
-	Box,
-	Container,
-	Paper,
-	Table,
-	TableBody,
-	TableCell,
-	TableContainer,
-	TableHead,
-	TableRow,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { useState } from 'react';
-import ScoreBar from '@/components/common/ScoreBar';
+import TabPanel from '@/components/common/TabPanel';
 
 function a11yProps(index: number) {
 	return {
@@ -28,14 +19,12 @@ export default function Home() {
 		setValue(newValue);
 	};
 	return (
-		<>
-			<Box
-				sx={{
-					mt: 4,
-					display: 'flex',
-					flexDirection: 'column',
-				}}
-			>
+		<Box>
+			<Box>
+				{/* page title */}
+				<Box>
+					<Typography variant='h2'>{`<lee>`}</Typography>
+				</Box>
 				<Tabs value={value} onChange={handleChange} variant='fullWidth'>
 					<Tab label='Texto' {...a11yProps(0)} value={'0'} />
 					<Tab label='URL' {...a11yProps(1)} value={'1'} />
@@ -44,6 +33,17 @@ export default function Home() {
 			</Box>
 
 			{/* content depending onn the selected tab */}
-		</>
+			<Box>
+				<TabPanel value={value} index='0'>
+					Introduce tu texto
+				</TabPanel>
+				<TabPanel value={value} index='1'>
+					Introduce un URL
+				</TabPanel>
+				<TabPanel value={value} index='2'>
+					Sube un archivo
+				</TabPanel>
+			</Box>
+		</Box>
 	);
 }
