@@ -1,5 +1,4 @@
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
 interface TabPanelProps {
 	children?: React.ReactNode;
@@ -18,11 +17,7 @@ export default function TabPanel(props: TabPanelProps) {
 			aria-labelledby={`simple-tab-${index}`}
 			{...other}
 		>
-			{value === index && (
-				<Paper sx={{ p: '1rem' }}>
-					<Typography>{children}</Typography>
-				</Paper>
-			)}
+			{value === index && <Box>{children}</Box>}
 		</div>
 	);
 }

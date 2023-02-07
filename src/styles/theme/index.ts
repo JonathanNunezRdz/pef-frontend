@@ -63,6 +63,9 @@ const theme = createTheme({
 			fontSize: 18,
 		},
 	},
+	shape: {
+		borderRadius: 10,
+	},
 });
 
 export type AppTheme = typeof theme;
