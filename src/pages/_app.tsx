@@ -10,7 +10,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import { CssBaseline } from '@mui/material';
 
-import createEmotionCache from '@/utils/createEmotionCache';
+import { createEmotionCache } from '@/utils';
 import theme from '@/styles/theme';
 import Layout from '@/components/layout';
 

@@ -58,6 +58,13 @@ const theme = createTheme({
 	},
 	typography: {
 		fontFamily: roboto.style.fontFamily,
+		fontSize: 18,
+		body1: {
+			fontSize: 18,
+		},
+	},
+	shape: {
+		borderRadius: 10,
 	},
 });
 
