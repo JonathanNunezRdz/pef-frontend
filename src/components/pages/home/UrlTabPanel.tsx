@@ -3,6 +3,8 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import InputAdornment from '@mui/material/InputAdornment';
+import LinkIcon from '@mui/icons-material/Link';
 import {
 	Controller,
 	SubmitHandler,
@@ -10,28 +12,34 @@ import {
 	FieldErrors,
 	FieldValues,
 } from 'react-hook-form';
+import { validateUrl } from '@/utils';
 
-interface RawTextTabPanelProps {}
+interface UrlTabPanelProps {}
 
 interface FormInputs {
-	text: string;
+	url: string;
 }
 
-export default function RawTextTabPanel({}: RawTextTabPanelProps) {
+export default function UrlTabPanel({}: UrlTabPanelProps) {
 	// hooks
 	const { control, handleSubmit } = useForm<FormInputs>({
 		defaultValues: {
-			text: '',
+			url: '',
 		},
 		resolver: (values) => {
 			const errors: FieldErrors<FormInputs> = {};
 			const validValues: FieldValues = values;
-			if (values.text.trim() === '')
-				errors.text = {
+			const url = values.url.trim();
+			if (url === '') {
+				errors.url = {
 					type: 'required',
 					message: 'Este campo es obligatorio',
 				};
-			else {
+			} else if (!validateUrl(url)) {
+				errors.url = {
+					type: 'pattern',
+					message: 'Este enlace no es válido',
+				};
 			}
 			return {
 				values: validValues,
@@ -55,21 +63,25 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 					<Paper sx={{ p: '1rem' }}>
 						<Controller
 							control={control}
-							name='text'
+							name='url'
 							render={({ field, fieldState: { error } }) => (
 								<TextField
 									ref={field.ref}
 									value={field.value}
 									onChange={field.onChange}
 									onBlur={field.onBlur}
-									inputProps={{ 'aria-label': 'Texto' }}
-									label='Introduce tu texto'
+									inputProps={{ 'aria-label': 'Url' }}
+									label='Introduce un enlace'
 									error={Boolean(error)}
 									helperText={error?.message}
 									fullWidth
-									multiline
-									minRows={5}
-									maxRows={10}
+									InputProps={{
+										startAdornment: (
+											<InputAdornment position='start'>
+												<LinkIcon />
+											</InputAdornment>
+										),
+									}}
 								/>
 							)}
 						/>

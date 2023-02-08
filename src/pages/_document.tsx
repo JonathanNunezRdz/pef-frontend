@@ -4,10 +4,9 @@ import Document, {
 	Head,
 	Main,
 	NextScript,
-	DocumentContext,
 	DocumentInitialProps,
 } from 'next/document';
-import createEmotionCache from '@/utils/createEmotionCache';
+import { createEmotionCache } from '@/utils';
 import theme from '@/styles/theme';
 
 interface Props extends DocumentInitialProps {

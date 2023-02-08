@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import Stack from '@mui/material/Stack';
 import { useState } from 'react';
 import TabPanel from '@/components/common/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,22 +10,16 @@ import LinkIcon from '@mui/icons-material/Link';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 
 import RawTextTabPanel from './RawTextTabPanel';
-import { Stack } from '@mui/material';
-
-function a11yProps(index: number) {
-	return {
-		id: `simple-tab-${index}`,
-		'aria-controls': `simple-tabpanel-${index}`,
-	};
-}
+import UrlTabPanel from './UrlTabPanel';
+import FileTabPanel from './FileTabPanel';
 
 export default function Home() {
 	// hooks
-	const [value, setValue] = useState('0');
+	const [currentTab, setCurrentTab] = useState('0');
 
 	// functions
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-		setValue(newValue);
+	const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
+		setCurrentTab(newValue);
 	};
 
 	return (
@@ -40,11 +35,11 @@ export default function Home() {
 				</Typography>
 			</Box>
 
-			{/* main content - analyze text */}
+			{/* main content - analyze text tabs*/}
 			<Box>
 				<Tabs
-					value={value}
-					onChange={handleChange}
+					value={currentTab}
+					onChange={handleChangeTab}
 					variant='fullWidth'
 					sx={(theme) => ({
 						backgroundColor: theme.palette.background.paper,
@@ -52,22 +47,25 @@ export default function Home() {
 					})}
 				>
 					<Tab
+						id='tab-raw-text'
+						aria-controls='tabpanel-raw-text'
 						label='Texto'
-						{...a11yProps(0)}
 						value={'0'}
 						icon={<EditIcon fontSize='small' />}
 						iconPosition='start'
 					/>
 					<Tab
+						id='tab-url'
+						aria-controls='tabpanel-url'
 						label='URL'
-						{...a11yProps(1)}
 						value={'1'}
 						icon={<LinkIcon fontSize='small' />}
 						iconPosition='start'
 					/>
 					<Tab
+						id='tab-file'
+						aria-controls='tabpanel-file'
 						label='Documento'
-						{...a11yProps(2)}
 						value={'2'}
 						icon={<UploadFileIcon fontSize='small' />}
 						iconPosition='start'
@@ -77,14 +75,14 @@ export default function Home() {
 
 			{/* content depending onn the selected tab */}
 			<Box>
-				<TabPanel value={value} index='0'>
+				<TabPanel value={currentTab} index='0' ariaId='raw-text'>
 					<RawTextTabPanel />
 				</TabPanel>
-				<TabPanel value={value} index='1'>
-					Introduce un URL
+				<TabPanel value={currentTab} index='1' ariaId='url'>
+					<UrlTabPanel />
 				</TabPanel>
-				<TabPanel value={value} index='2'>
-					Sube un archivo
+				<TabPanel value={currentTab} index='2' ariaId='file'>
+					<FileTabPanel />
 				</TabPanel>
 			</Box>
 		</Stack>
