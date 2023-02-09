@@ -5,12 +5,17 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
+import { AllScores } from '@/types';
 
 interface TableExampleProps {
-	title: string;
+	title?: string;
+	scores: AllScores;
 }
 
-export default function TableExample({ title }: TableExampleProps) {
+export default function TableExample({
+	title = 'Legibilidad del Texto',
+	scores,
+}: TableExampleProps) {
 	return (
 		<TableContainer component={Paper}>
 			<Table aria-label='legibilidad del texto'>
@@ -21,7 +26,7 @@ export default function TableExample({ title }: TableExampleProps) {
 				>
 					<TableRow>
 						<TableCell align='center' colSpan={3}>
-							Legibilidad del Texto
+							{title}
 						</TableCell>
 					</TableRow>
 					<TableRow>
@@ -33,31 +38,46 @@ export default function TableExample({ title }: TableExampleProps) {
 				<TableBody>
 					<TableRow>
 						<TableCell align='center'>Fernandez Huerta</TableCell>
-						<TableCell align='center'>83.78</TableCell>
-						<TableCell align='center'>Fácil</TableCell>
+						<TableCell align='center'>{scores.fh.score}</TableCell>
+						<TableCell align='center'>
+							{scores.fh.difficulty}
+						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>
 							Gutiérrez de Polini
 						</TableCell>
-						<TableCell align='center'>52.12</TableCell>
-						<TableCell align='center'>Normal</TableCell>
+						<TableCell align='center'>{scores.gp.score}</TableCell>
+						<TableCell align='center'>
+							{scores.gp.difficulty}
+						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>Szigriszt-Pazos</TableCell>
-						<TableCell align='center'>79.24</TableCell>
-						<TableCell align='center'>Fácil</TableCell>
+						<TableCell align='center'>{scores.sp.score}</TableCell>
+						<TableCell align='center'>
+							{scores.sp.difficulty}
+						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>Inflesz</TableCell>
-						<TableCell align='center'>79.24</TableCell>
-						<TableCell align='center'>Bastante Fácil</TableCell>
+						<TableCell align='center'>{scores.i.score}</TableCell>
+						<TableCell align='center'>
+							{scores.i.difficulty}
+						</TableCell>
 					</TableRow>
 
 					<TableRow>
 						<TableCell align='center'>Legibilidad μ</TableCell>
-						<TableCell align='center'>83.78</TableCell>
-						<TableCell align='center'>Fácil</TableCell>
+						<TableCell align='center'>{scores.m.score}</TableCell>
+						<TableCell align='center'>
+							{scores.m.difficulty}
+						</TableCell>
+					</TableRow>
+
+					<TableRow>
+						<TableCell align='center'>Crawford</TableCell>
+						<TableCell align='center'>{scores.c.score}</TableCell>
 					</TableRow>
 				</TableBody>
 			</Table>

@@ -60,6 +60,10 @@ export default function Header() {
 		return 'none';
 	};
 	const isActiveLink = (pathname: string) => router.pathname === pathname;
+	const handleLinkClicked = (route: string) => {
+		if (route === 'Iniciar sesión') logIn();
+		if (route === 'Cerrar sesión') logOut();
+	};
 
 	// render
 	return (
@@ -185,6 +189,7 @@ export default function Header() {
 											theme.palette.primary.dark,
 									},
 								})}
+								onClick={() => handleLinkClicked(link.label)}
 							>
 								{link.label}
 							</Link>
