@@ -1,7 +1,7 @@
 import { Page } from '@/components/layout/Header';
 /**
- * historial
- * mi cuenta
+ * historial \
+ * mi cuenta \
  * cerrar sesion
  */
 const loggedInLinks: Page[] = [
@@ -11,7 +11,7 @@ const loggedInLinks: Page[] = [
 ];
 
 /**
- * iniciar sesion
+ * iniciar sesion \
  * crear una cuenta
  */
 const loggedOutLinks: Page[] = [

@@ -38,46 +38,56 @@ export default function TableExample({
 				<TableBody>
 					<TableRow>
 						<TableCell align='center'>Fernandez Huerta</TableCell>
-						<TableCell align='center'>{scores.fh.score}</TableCell>
 						<TableCell align='center'>
-							{scores.fh.difficulty}
+							{scores.fHuerta.score}
+						</TableCell>
+						<TableCell align='center'>
+							{scores.fHuerta.difficulty}
 						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>
 							Gutiérrez de Polini
 						</TableCell>
-						<TableCell align='center'>{scores.gp.score}</TableCell>
 						<TableCell align='center'>
-							{scores.gp.difficulty}
+							{scores.gPolini.score}
+						</TableCell>
+						<TableCell align='center'>
+							{scores.gPolini.difficulty}
 						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>Szigriszt-Pazos</TableCell>
-						<TableCell align='center'>{scores.sp.score}</TableCell>
 						<TableCell align='center'>
-							{scores.sp.difficulty}
+							{scores.sPazos.score}
+						</TableCell>
+						<TableCell align='center'>
+							{scores.sPazos.difficulty}
 						</TableCell>
 					</TableRow>
 					<TableRow>
 						<TableCell align='center'>Inflesz</TableCell>
-						<TableCell align='center'>{scores.i.score}</TableCell>
 						<TableCell align='center'>
-							{scores.i.difficulty}
+							{scores.inflesz.score}
+						</TableCell>
+						<TableCell align='center'>
+							{scores.inflesz.difficulty}
 						</TableCell>
 					</TableRow>
 
 					<TableRow>
 						<TableCell align='center'>Legibilidad μ</TableCell>
-						<TableCell align='center'>{scores.m.score}</TableCell>
+						<TableCell align='center'>{scores.mu.score}</TableCell>
 						<TableCell align='center'>
-							{scores.m.difficulty}
+							{scores.mu.difficulty}
 						</TableCell>
 					</TableRow>
 
 					<TableRow>
 						<TableCell align='center'>Crawford</TableCell>
-						<TableCell align='center'>{scores.c.score}</TableCell>
+						<TableCell align='center'>
+							{scores.crawford.score}
+						</TableCell>
 					</TableRow>
 				</TableBody>
 			</Table>

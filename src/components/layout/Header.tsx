@@ -11,13 +11,16 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import { MouseEvent, useState } from 'react';
 
-import { useAppMediaQuery } from '@/styles/theme';
 import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
 import { useRouter } from 'next/router';
-import { useLinks } from '@/hooks';
-
-// TODO: continue with appbar example on mui
+import {
+	useAppDispatch,
+	useAppSelector,
+	useLinks,
+	useAppMediaQuery,
+} from '@/hooks';
+import { selectAuth, testLoginAction, testLogoutAction } from '@/store/user';
 
 export type Page = {
 	route: string;
@@ -30,21 +33,27 @@ const generalLinks: Page[] = [
 ];
 
 export default function Header() {
-	// hooks
+	// redux hooks
+	const dispatch = useAppDispatch();
+	const { isLoggedIn } = useAppSelector(selectAuth);
+
+	// next hooks
 	const router = useRouter();
+
+	// react hooks
 	const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
-	const [loggedIn, setLoggedIn] = useState(false);
+
 	const showOnMobile = useAppMediaQuery((theme) =>
 		theme.breakpoints.down('sm')
 	);
-	const links = useLinks(loggedIn);
+	const links = useLinks(isLoggedIn);
 
 	// functions
 	const logIn = () => {
-		setLoggedIn(true);
+		dispatch(testLoginAction());
 	};
 	const logOut = () => {
-		setLoggedIn(false);
+		dispatch(testLogoutAction());
 	};
 	const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);

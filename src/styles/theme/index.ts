@@ -1,4 +1,3 @@
-import { useMediaQuery } from '@mui/material';
 import { amber, lime } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 import { Roboto } from '@next/font/google';
@@ -69,7 +68,5 @@ const theme = createTheme({
 });
 
 export type AppTheme = typeof theme;
-
-export const useAppMediaQuery = useMediaQuery<AppTheme>;
 
 export default theme;

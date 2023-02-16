@@ -10,10 +10,8 @@ import {
 	FieldErrors,
 	FieldValues,
 } from 'react-hook-form';
-import { AllScores } from '@/types';
-import { useState } from 'react';
-import { Typography } from '@mui/material';
-import TableExample from './TableExample';
+import { useAppDispatch } from '@/hooks';
+import { postAnalysisAction } from '@/store/analysis/actions';
 
 interface RawTextTabPanelProps {}
 
@@ -22,8 +20,10 @@ interface FormInputs {
 }
 
 export default function RawTextTabPanel({}: RawTextTabPanelProps) {
-	// hooks
-	const [analysisData, setAnalysisData] = useState<AllScores | undefined>();
+	// redux hooks
+	const dispatch = useAppDispatch();
+
+	// react hook form
 	const { control, handleSubmit } = useForm<FormInputs>({
 		defaultValues: {
 			text: '',
@@ -48,20 +48,7 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 	// functions
 	const onSubmit: SubmitHandler<FormInputs> = async (data) => {
 		// call backend to analyze text
-		try {
-			const res = await fetch('http://localhost:4200/analysis', {
-				method: 'POST',
-				mode: 'cors',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(data),
-			});
-			const analysisData = await res.json();
-			setAnalysisData(analysisData);
-		} catch (error) {
-			console.error(error);
-		}
+		dispatch(postAnalysisAction(data));
 	};
 
 	// effects
@@ -107,14 +94,6 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 						>
 							Analizar
 						</Button>
-					</Paper>
-					<Paper sx={{ p: '1rem' }}>
-						<Typography variant='h5'>Resultado</Typography>
-						{analysisData ? (
-							<TableExample scores={analysisData} />
-						) : (
-							''
-						)}
 					</Paper>
 				</Stack>
 			</form>
