@@ -1,12 +1,9 @@
 import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import { MouseEvent, useState } from 'react';
@@ -34,7 +31,6 @@ const generalLinks: Page[] = [
 
 export default function Header() {
 	// redux hooks
-	const dispatch = useAppDispatch();
 	const { isLoggedIn } = useAppSelector(selectAuth);
 
 	// next hooks
@@ -49,18 +45,10 @@ export default function Header() {
 	const links = useLinks(isLoggedIn);
 
 	// functions
-	const logIn = () => {
-		dispatch(testLoginAction());
-	};
-	const logOut = () => {
-		dispatch(testLogoutAction());
-	};
 	const handleOpenNavMenu = (event: MouseEvent<HTMLElement>) => {
 		setAnchorElNav(event.currentTarget);
 	};
-	const handleCloseNavMenu = (route: string) => {
-		if (route === 'Iniciar sesión') logIn();
-		if (route === 'Cerrar sesión') logOut();
+	const handleCloseNavMenu = () => {
 		setAnchorElNav(null);
 	};
 	const flexOnMobile = (invert = false) => {
@@ -69,10 +57,6 @@ export default function Header() {
 		return 'none';
 	};
 	const isActiveLink = (pathname: string) => router.pathname === pathname;
-	const handleLinkClicked = (route: string) => {
-		if (route === 'Iniciar sesión') logIn();
-		if (route === 'Cerrar sesión') logOut();
-	};
 
 	// render
 	return (
@@ -130,9 +114,7 @@ export default function Header() {
 							{[...generalLinks, ...links].map((link) => (
 								<MenuItem
 									key={link.label}
-									onClick={() =>
-										handleCloseNavMenu(link.label)
-									}
+									onClick={handleCloseNavMenu}
 									component={NextLinkComposed}
 									to={link.route}
 									selected={isActiveLink(link.route)}
@@ -198,7 +180,6 @@ export default function Header() {
 											theme.palette.primary.dark,
 									},
 								})}
-								onClick={() => handleLinkClicked(link.label)}
 							>
 								{link.label}
 							</Link>

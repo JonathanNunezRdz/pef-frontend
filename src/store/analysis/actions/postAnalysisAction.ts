@@ -16,7 +16,9 @@ export const postAnalysisAction = createAsyncThunk<
 			body: JSON.stringify(dto),
 		});
 		const data = await res.json();
-		return data;
+		return {
+			data,
+		};
 	} catch (error) {
 		return rejectWithValue(error as HttpError);
 	}

@@ -7,7 +7,7 @@ const initialState: UserState = {
 	user: {
 		data: {} as User,
 		status: 'idle',
-		error: null,
+		error: undefined,
 	},
 	auth: {
 		isLoggedIn: false,
@@ -15,11 +15,11 @@ const initialState: UserState = {
 	},
 	signIn: {
 		status: 'idle',
-		error: null,
+		error: undefined,
 	},
 	signOut: {
 		status: 'idle',
-		error: null,
+		error: undefined,
 	},
 };
 

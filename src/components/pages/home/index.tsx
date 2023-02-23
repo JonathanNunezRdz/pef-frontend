@@ -8,20 +8,19 @@ import TabPanel from '@/components/common/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import LinkIcon from '@mui/icons-material/Link';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { Button, CircularProgress, Paper } from '@mui/material';
 
 import RawTextTabPanel from './RawTextTabPanel';
 import UrlTabPanel from './UrlTabPanel';
 import FileTabPanel from './FileTabPanel';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { selectPostAnalysis } from '@/store/analysis/selectors';
-import { Button, Paper } from '@mui/material';
-import TableExample from './TableExample';
-import { resetPostAnalysisAction } from '@/store/analysis';
+import AlgorithmScores from './AlgorithmScores';
+
+import Card from '@/components/common/Card';
+import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
 
 export default function Home() {
 	// redux hooks
-	const dispatch = useAppDispatch();
-	const postedAnalysis = useAppSelector(selectPostAnalysis);
+	const [postAnalysis, result] = useAddAnalysisMutation({});
 
 	// react hooks
 	const [currentTab, setCurrentTab] = useState('0');
@@ -31,7 +30,7 @@ export default function Home() {
 		setCurrentTab(newValue);
 	};
 	const handleResetPost = () => {
-		dispatch(resetPostAnalysisAction());
+		result.reset();
 	};
 
 	return (
@@ -48,43 +47,44 @@ export default function Home() {
 			</Box>
 
 			{/* main content - analyze text tabs*/}
-			{postedAnalysis.status === 'idle' ? (
+			{result.isUninitialized && (
 				<>
 					<Box>
-						<Tabs
-							value={currentTab}
-							onChange={handleChangeTab}
-							variant='fullWidth'
-							sx={(theme) => ({
-								backgroundColor: theme.palette.background.paper,
-								borderRadius: '10px',
-							})}
-						>
-							<Tab
-								id='tab-raw-text'
-								aria-controls='tabpanel-raw-text'
-								label='Texto'
-								value={'0'}
-								icon={<EditIcon fontSize='small' />}
-								iconPosition='start'
-							/>
-							<Tab
-								id='tab-url'
-								aria-controls='tabpanel-url'
-								label='URL'
-								value={'1'}
-								icon={<LinkIcon fontSize='small' />}
-								iconPosition='start'
-							/>
-							<Tab
-								id='tab-file'
-								aria-controls='tabpanel-file'
-								label='Documento'
-								value={'2'}
-								icon={<UploadFileIcon fontSize='small' />}
-								iconPosition='start'
-							/>
-						</Tabs>
+						<Paper>
+							<Tabs
+								value={currentTab}
+								onChange={handleChangeTab}
+								variant='fullWidth'
+								sx={{
+									borderRadius: '10px',
+								}}
+							>
+								<Tab
+									id='tab-raw-text'
+									aria-controls='tabpanel-raw-text'
+									label='Texto'
+									value={'0'}
+									icon={<EditIcon fontSize='small' />}
+									iconPosition='start'
+								/>
+								<Tab
+									id='tab-url'
+									aria-controls='tabpanel-url'
+									label='URL'
+									value={'1'}
+									icon={<LinkIcon fontSize='small' />}
+									iconPosition='start'
+								/>
+								<Tab
+									id='tab-file'
+									aria-controls='tabpanel-file'
+									label='Documento'
+									value={'2'}
+									icon={<UploadFileIcon fontSize='small' />}
+									iconPosition='start'
+								/>
+							</Tabs>
+						</Paper>
 					</Box>
 
 					{/* content depending on the selected tab */}
@@ -94,7 +94,7 @@ export default function Home() {
 							index='0'
 							ariaId='raw-text'
 						>
-							<RawTextTabPanel />
+							<RawTextTabPanel postAnalysis={postAnalysis} />
 						</TabPanel>
 						<TabPanel value={currentTab} index='1' ariaId='url'>
 							<UrlTabPanel />
@@ -104,16 +104,48 @@ export default function Home() {
 						</TabPanel>
 					</Box>
 				</>
-			) : (
-				<Box>
-					<Paper sx={{ p: '1rem' }}>
-						<Typography variant='h5'>Resultado</Typography>
-						<TableExample scores={postedAnalysis.data.scores} />
-						<Button onClick={handleResetPost}>
+			)}
+			{result.isLoading && (
+				<Card
+					paperProps={{
+						sx: {
+							display: 'flex',
+							justifyContent: 'center',
+						},
+					}}
+				>
+					<CircularProgress />
+				</Card>
+			)}
+			{result.isSuccess && (
+				<>
+					<Card>
+						<Typography variant='h5'>Resultados</Typography>
+					</Card>
+					<Card>
+						<AlgorithmScores scores={result.data.scores} />
+					</Card>
+					<Card>
+						<Typography variant='h6'>Texto original</Typography>
+						<Typography>{result.originalArgs?.text}</Typography>
+					</Card>
+					<Card
+						paperProps={{
+							sx: {
+								flexDirection: 'row-reverse',
+								display: 'flex',
+							},
+						}}
+					>
+						<Button
+							onClick={handleResetPost}
+							variant='contained'
+							color='secondary'
+						>
 							Hacer otro analisis
 						</Button>
-					</Paper>
-				</Box>
+					</Card>
+				</>
 			)}
 		</Stack>
 	);
