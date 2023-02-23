@@ -10,34 +10,32 @@ import {
 	FieldErrors,
 	FieldValues,
 } from 'react-hook-form';
-import { useAppDispatch } from '@/hooks';
-import { postAnalysisAction } from '@/store/analysis/actions';
+import Card from '@/components/common/Card';
+import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
+import { PostAnalysisDto } from '@/types';
 
-interface RawTextTabPanelProps {}
-
-interface FormInputs {
-	text: string;
+interface RawTextTabPanelProps {
+	postAnalysis: ReturnType<typeof useAddAnalysisMutation>[0];
 }
 
-export default function RawTextTabPanel({}: RawTextTabPanelProps) {
+export default function RawTextTabPanel({
+	postAnalysis,
+}: RawTextTabPanelProps) {
 	// redux hooks
-	const dispatch = useAppDispatch();
 
 	// react hook form
-	const { control, handleSubmit } = useForm<FormInputs>({
+	const { control, handleSubmit } = useForm<PostAnalysisDto>({
 		defaultValues: {
 			text: '',
 		},
 		resolver: (values) => {
-			const errors: FieldErrors<FormInputs> = {};
+			const errors: FieldErrors<PostAnalysisDto> = {};
 			const validValues: FieldValues = values;
 			if (values.text.trim() === '')
 				errors.text = {
 					type: 'required',
 					message: 'Este campo es obligatorio',
 				};
-			else {
-			}
 			return {
 				values: validValues,
 				errors,
@@ -46,9 +44,10 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<FormInputs> = async (data) => {
+	const onSubmit: SubmitHandler<PostAnalysisDto> = async (data) => {
 		// call backend to analyze text
-		dispatch(postAnalysisAction(data));
+		// dispatch(postAnalysisAction(data));
+		postAnalysis(data);
 	};
 
 	// effects
@@ -80,11 +79,12 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 							)}
 						/>
 					</Paper>
-					<Paper
-						sx={{
-							p: '1rem',
-							flexDirection: 'row-reverse',
-							display: 'flex',
+					<Card
+						paperProps={{
+							sx: {
+								flexDirection: 'row-reverse',
+								display: 'flex',
+							},
 						}}
 					>
 						<Button
@@ -94,7 +94,7 @@ export default function RawTextTabPanel({}: RawTextTabPanelProps) {
 						>
 							Analizar
 						</Button>
-					</Paper>
+					</Card>
 				</Stack>
 			</form>
 		</Box>

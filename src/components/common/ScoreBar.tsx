@@ -5,6 +5,7 @@ import LinearProgress, {
 
 interface ScoreBarProps extends LinearProgressProps {
 	value: number;
+	displayValue?: boolean;
 }
 
 // 100-80 green
@@ -14,7 +15,7 @@ interface ScoreBarProps extends LinearProgressProps {
 // 20-0 red
 
 export default function ScoreBar(props: ScoreBarProps) {
-	const { value, ...rest } = props;
+	const { value, displayValue, ...rest } = props;
 	const realValue = Math.min(value, 100);
 	const getColor = () => {
 		if (realValue <= 20) return 'error';
@@ -25,7 +26,7 @@ export default function ScoreBar(props: ScoreBarProps) {
 	};
 	return (
 		<Box sx={{ display: 'flex', alignItems: 'center' }}>
-			<Box sx={{ width: '100%', mr: 1 }}>
+			<Box sx={{ width: '100%', mr: displayValue ? 1 : undefined }}>
 				<LinearProgress
 					variant='determinate'
 					color={getColor()}
@@ -33,12 +34,14 @@ export default function ScoreBar(props: ScoreBarProps) {
 					{...rest}
 				/>
 			</Box>
-			<Box sx={{ minWidth: 35 }}>
-				<Typography
-					variant='body2'
-					color='text.secondary'
-				>{`${Math.round(realValue)}%`}</Typography>
-			</Box>
+			{displayValue && (
+				<Box sx={{ minWidth: 35 }}>
+					<Typography
+						variant='body2'
+						color='text.secondary'
+					>{`${Math.round(realValue)}%`}</Typography>
+				</Box>
+			)}
 		</Box>
 	);
 }

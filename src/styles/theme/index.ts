@@ -61,6 +61,9 @@ const theme = createTheme({
 		body1: {
 			fontSize: 18,
 		},
+		button: {
+			lineHeight: 1.7,
+		},
 	},
 	shape: {
 		borderRadius: 10,
