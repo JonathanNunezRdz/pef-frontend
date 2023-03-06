@@ -19,7 +19,9 @@
 			"@/*": ["./src/*"]
 		},
 		"noImplicitAny": true,
-		"noImplicitThis": true
+		"noImplicitThis": true,
+		"experimentalDecorators": true,
+		"strictPropertyInitialization": false
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
 	"exclude": ["node_modules"]
