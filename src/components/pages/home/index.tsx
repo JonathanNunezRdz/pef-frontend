@@ -127,7 +127,9 @@ export default function Home() {
 					</Card>
 					<Card>
 						<Typography variant='h6'>Texto original</Typography>
-						<Typography>{result.originalArgs?.text}</Typography>
+						<Card paperProps={{ elevation: 3 }}>
+							<Typography>{result.originalArgs?.text}</Typography>
+						</Card>
 					</Card>
 					<Card
 						paperProps={{
