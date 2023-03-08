@@ -13,7 +13,7 @@ export default function ScoreExtras({ extra }: ScoreExtrasProps) {
 			{Object.entries(extra).map(([_, { label, value }]) => {
 				return (
 					<Grid key={label}>
-						<Chip label={`${label} ${value}`} />
+						<Chip label={`${label}: ${value}`} />
 					</Grid>
 				);
 			})}

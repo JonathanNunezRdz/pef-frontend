@@ -1,6 +1,6 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+// import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
@@ -11,13 +11,8 @@ import { MouseEvent, useState } from 'react';
 import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
 import { useRouter } from 'next/router';
-import {
-	useAppDispatch,
-	useAppSelector,
-	useLinks,
-	useAppMediaQuery,
-} from '@/hooks';
-import { selectAuth, testLoginAction, testLogoutAction } from '@/store/user';
+import { useAppSelector, useLinks, useAppMediaQuery } from '@/hooks';
+import { selectAuth } from '@/store/user';
 
 export type Page = {
 	route: string;
@@ -65,7 +60,7 @@ export default function Header() {
 			enableColorOnDark
 			sx={{ borderRadius: '10px' }}
 		>
-			<Container maxWidth='md'>
+			<Box px='1rem'>
 				<Toolbar disableGutters>
 					{/* left side logo only on desktop*/}
 					<Box sx={{ flexGrow: showOnMobile ? 1 : 0 }}>
@@ -186,7 +181,7 @@ export default function Header() {
 						))}
 					</Box>
 				</Toolbar>
-			</Container>
+			</Box>
 		</AppBar>
 	);
 }

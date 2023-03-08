@@ -19,9 +19,23 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 
 	const label = () => {
 		if (score.level) {
-			return `${score.value.toFixed(2)} / ${max}`;
+			return (
+				<>
+					<Typography fontWeight='bold' component='span'>
+						{score.value.toFixed(2)} / {max}
+					</Typography>{' '}
+					{unit}
+				</>
+			);
 		}
-		return `${score.value.toFixed(2)}`;
+		return (
+			<>
+				<Typography fontWeight='bold' component='span'>
+					{score.value.toFixed(2)}
+				</Typography>{' '}
+				{unit}
+			</>
+		);
 	};
 
 	useEffect(() => {
@@ -36,18 +50,16 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 	return (
 		<GridV1 item xs={1}>
 			<Paper sx={{ p: '1rem' }} elevation={3}>
-				<Stack direction='column' spacing='0.75rem'>
+				<Stack direction='column' spacing={1}>
 					<Box>
 						<Typography fontSize={20} fontWeight='bold'>
 							{name}
 						</Typography>
-
-						<GridV2 container spacing={2}>
+					</Box>
+					<Box>
+						<GridV2 container spacing={1}>
 							<GridV2>
 								<Chip label={label()} />
-							</GridV2>
-							<GridV2>
-								<Chip label={unit} />
 							</GridV2>
 							<ScoreExtras extra={score.extra} />
 						</GridV2>
@@ -55,6 +67,7 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 
 					{score.level && (
 						<Box>
+							<Typography>Nivel: {score.level}</Typography>
 							<ScoreBar
 								value={realValue}
 								sx={{
@@ -66,7 +79,6 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 								<Typography>{min}</Typography>
 								<Typography>{max}</Typography>
 							</Box>
-							<Typography>Nivel: {score.level}</Typography>
 						</Box>
 					)}
 				</Stack>

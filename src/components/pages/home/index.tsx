@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import LinkIcon from '@mui/icons-material/Link';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Button, CircularProgress, Paper } from '@mui/material';
+import Image from 'next/image';
 
 import RawTextTabPanel from './RawTextTabPanel';
 import UrlTabPanel from './UrlTabPanel';
@@ -17,6 +18,7 @@ import AlgorithmScores from './AlgorithmScores';
 
 import Card from '@/components/common/Card';
 import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
+import Logo from '../../../../public/static/images/logo/logo_white.png';
 
 export default function Home() {
 	// redux hooks
@@ -37,13 +39,23 @@ export default function Home() {
 		<Stack direction='column' spacing='1rem'>
 			{/* page title */}
 			<Box>
-				<Typography variant='h2'>{`<lee>`}</Typography>
-				<Typography
-					variant='subtitle2'
-					color={(theme) => theme.palette.text.disabled}
-				>
-					Analizador de texto en español castellano.
-				</Typography>
+				<Box display='flex' alignItems='end' gap='1rem'>
+					<Box>
+						<Image
+							src={Logo}
+							alt='logo de la aplicacion'
+							height={Logo.height * 0.5}
+							width={Logo.width * 0.5}
+						/>
+					</Box>
+					<Typography
+						variant='subtitle1'
+						color={(theme) => theme.palette.text.disabled}
+					>
+						Analizador de legibilidad de texto en español
+						castellano.
+					</Typography>
+				</Box>
 			</Box>
 
 			{/* main content - analyze text tabs*/}

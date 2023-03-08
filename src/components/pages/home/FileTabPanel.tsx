@@ -41,7 +41,7 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 							/>
 						</Button>
 						<FormHelperText>
-							Tip: Puedes arrastrar el documento al boton
+							Tip: Puedes arrastrar el documento al botón
 						</FormHelperText>
 					</Paper>
 					<Paper
