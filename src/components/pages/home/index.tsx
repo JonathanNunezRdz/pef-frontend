@@ -138,6 +138,20 @@ export default function Home() {
 						<AlgorithmScores scores={result.data.scores} />
 					</Card>
 					<Card>
+						<Typography variant='h6'>Estadisticos</Typography>
+						{Object.entries(result.data.metrics).map(
+							([key, value]) => {
+								return (
+									<Box key={key}>
+										<Typography>
+											{key}: {value}
+										</Typography>
+									</Box>
+								);
+							}
+						)}
+					</Card>
+					<Card>
 						<Typography variant='h6'>Texto original</Typography>
 						<Card paperProps={{ elevation: 3 }}>
 							<Typography>{result.originalArgs?.text}</Typography>
