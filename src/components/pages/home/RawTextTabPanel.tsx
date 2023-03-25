@@ -27,6 +27,7 @@ export default function RawTextTabPanel({
 	const { control, handleSubmit } = useForm<PostAnalysisDto>({
 		defaultValues: {
 			text: '',
+			numOfSamples: 5,
 		},
 		resolver: (values) => {
 			const errors: FieldErrors<PostAnalysisDto> = {};
