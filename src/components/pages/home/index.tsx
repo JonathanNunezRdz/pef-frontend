@@ -144,7 +144,7 @@ export default function Home() {
 								return (
 									<Box key={key}>
 										<Typography>
-											{key}: {value}
+											{key}: {value.toFixed(2)}
 										</Typography>
 									</Box>
 								);
@@ -172,6 +172,20 @@ export default function Home() {
 						>
 							Hacer otro analisis
 						</Button>
+					</Card>
+				</>
+			)}
+			{result.isError && (
+				<>
+					<Card>
+						<Typography variant='h5'>Error!</Typography>
+					</Card>
+					<Card>
+						<Typography>
+							{'status' in result.error
+								? JSON.stringify(result.error.data)
+								: JSON.stringify(result.error)}
+						</Typography>
 					</Card>
 				</>
 			)}

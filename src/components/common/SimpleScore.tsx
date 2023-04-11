@@ -41,7 +41,7 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 	useEffect(() => {
 		const timeout = setTimeout(() => {
 			setRealValue(score.value);
-		}, 1000);
+		}, 250);
 		return () => {
 			clearTimeout(timeout);
 		};
