@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Stack from '@mui/material/Stack';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TabPanel from '@/components/common/TabPanel';
 import EditIcon from '@mui/icons-material/Edit';
 import LinkIcon from '@mui/icons-material/Link';
@@ -22,6 +22,7 @@ import {
 	useAddAnalysisWithFileMutation,
 } from '@/store/analysis/analysisApi';
 import Logo from '../../../../public/static/images/logo/logo_white.png';
+import { AnalysisResponse } from '@/types';
 
 export default function Home() {
 	// redux hooks
@@ -31,6 +32,31 @@ export default function Home() {
 
 	// react hooks
 	const [currentTab, setCurrentTab] = useState('0');
+	const [currentResult, setCurrentResult] =
+		useState<AnalysisResponse | null>();
+	const [showTabs, setShowTabs] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (postAnalysisResult.isSuccess) {
+			setCurrentResult(postAnalysisResult.data);
+		} else if (postAnalysisWithFileResult.isSuccess) {
+			setCurrentResult(postAnalysisWithFileResult.data);
+		}
+	}, [postAnalysisResult, postAnalysisWithFileResult]);
+	useEffect(() => {
+		if (
+			postAnalysisResult.isUninitialized &&
+			postAnalysisWithFileResult.isUninitialized
+		) {
+			setShowTabs(true);
+		}
+		if (
+			postAnalysisResult.isLoading ||
+			postAnalysisWithFileResult.isLoading
+		) {
+			setShowTabs(false);
+		}
+	}, [postAnalysisResult, postAnalysisWithFileResult]);
 
 	// functions
 	const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
@@ -38,6 +64,9 @@ export default function Home() {
 	};
 	const handleResetPost = () => {
 		postAnalysisResult.reset();
+		postAnalysisWithFileResult.reset();
+		setCurrentResult(null);
+		setShowTabs(true);
 	};
 
 	return (
@@ -64,7 +93,7 @@ export default function Home() {
 			</Box>
 
 			{/* main content - analyze text tabs*/}
-			{postAnalysisResult.isUninitialized && (
+			{showTabs && (
 				<>
 					<Box>
 						<Paper>
@@ -117,36 +146,37 @@ export default function Home() {
 							<UrlTabPanel />
 						</TabPanel>
 						<TabPanel value={currentTab} index='2' ariaId='file'>
-							<FileTabPanel />
+							<FileTabPanel
+								postAnalysisWithFile={postAnalysisWithFile}
+							/>
 						</TabPanel>
 					</Box>
 				</>
 			)}
-			{postAnalysisResult.isLoading && (
-				<Card
-					paperProps={{
-						sx: {
-							display: 'flex',
-							justifyContent: 'center',
-						},
-					}}
-				>
-					<CircularProgress />
-				</Card>
-			)}
-			{postAnalysisResult.isSuccess && (
+			{postAnalysisResult.isLoading ||
+				(postAnalysisWithFileResult.isLoading && (
+					<Card
+						paperProps={{
+							sx: {
+								display: 'flex',
+								justifyContent: 'center',
+							},
+						}}
+					>
+						<CircularProgress />
+					</Card>
+				))}
+			{currentResult && (
 				<>
 					<Card>
 						<Typography variant='h5'>Resultados</Typography>
 					</Card>
 					<Card>
-						<AlgorithmScores
-							scores={postAnalysisResult.data.scores}
-						/>
+						<AlgorithmScores scores={currentResult.scores} />
 					</Card>
 					<Card>
 						<Typography variant='h6'>Estadisticos</Typography>
-						{Object.entries(postAnalysisResult.data.metrics).map(
+						{Object.entries(currentResult.metrics).map(
 							([key, value]) => {
 								return (
 									<Box key={key}>
@@ -158,14 +188,14 @@ export default function Home() {
 							}
 						)}
 					</Card>
-					<Card>
+					{/* <Card>
 						<Typography variant='h6'>Texto original</Typography>
 						<Card paperProps={{ elevation: 3 }}>
 							<Typography>
 								{postAnalysisResult.originalArgs?.text}
 							</Typography>
 						</Card>
-					</Card>
+					</Card> */}
 					<Card
 						paperProps={{
 							sx: {

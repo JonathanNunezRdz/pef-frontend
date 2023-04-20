@@ -31,9 +31,9 @@ export const analysisApi = createApi({
 			PostAnalysisWithFileThunk
 		>({
 			query(body) {
-				const { document, numOfSamples } = body;
+				const { document } = body;
 				const bodyFormData = new FormData();
-				bodyFormData.append('numOfSamples', numOfSamples.toString());
+				// bodyFormData.append('numOfSamples', numOfSamples.toString());
 				bodyFormData.append('document', document);
 				return {
 					url: `file`,

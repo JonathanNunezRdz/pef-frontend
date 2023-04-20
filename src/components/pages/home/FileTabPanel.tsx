@@ -21,10 +21,15 @@ import {
 	useForm,
 } from 'react-hook-form';
 import { PostAnalysisWithFileDto } from '@/types';
+import { useAddAnalysisWithFileMutation } from '@/store/analysis/analysisApi';
 
-interface FileTabPanelProps {}
+interface FileTabPanelProps {
+	postAnalysisWithFile: ReturnType<typeof useAddAnalysisWithFileMutation>[0];
+}
 
-export default function FileTabPanel({}: FileTabPanelProps) {
+export default function FileTabPanel({
+	postAnalysisWithFile,
+}: FileTabPanelProps) {
 	// react hooks
 	const [document, setDocument] = useState<File>();
 
@@ -52,8 +57,8 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 
 	// functions
 	const onSubmit: SubmitHandler<PostAnalysisWithFileDto> = (data) => {
-		console.log(data);
-		console.log(document);
+		if (!document) return;
+		postAnalysisWithFile({ document, numOfSamples: data.numOfSamples });
 	};
 	const handleDocumentChange = async (
 		event: ChangeEvent<HTMLInputElement>
