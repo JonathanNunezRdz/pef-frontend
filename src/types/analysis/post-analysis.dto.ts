@@ -9,3 +9,13 @@ export class PostAnalysisDto {
 	@IsOptional()
 	numOfSamples: number;
 }
+
+export interface PostAnalysisWithFileThunk {
+	numOfSamples: number;
+	document: File;
+}
+
+export interface PostAnalysisWithFileDto {
+	numOfSamples: number;
+	documentLoaded: boolean;
+}

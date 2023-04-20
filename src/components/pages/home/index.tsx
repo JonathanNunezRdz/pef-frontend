@@ -17,12 +17,17 @@ import FileTabPanel from './FileTabPanel';
 import AlgorithmScores from './AlgorithmScores';
 
 import Card from '@/components/common/Card';
-import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
+import {
+	useAddAnalysisMutation,
+	useAddAnalysisWithFileMutation,
+} from '@/store/analysis/analysisApi';
 import Logo from '../../../../public/static/images/logo/logo_white.png';
 
 export default function Home() {
 	// redux hooks
-	const [postAnalysis, result] = useAddAnalysisMutation({});
+	const [postAnalysis, postAnalysisResult] = useAddAnalysisMutation({});
+	const [postAnalysisWithFile, postAnalysisWithFileResult] =
+		useAddAnalysisWithFileMutation({});
 
 	// react hooks
 	const [currentTab, setCurrentTab] = useState('0');
@@ -32,7 +37,7 @@ export default function Home() {
 		setCurrentTab(newValue);
 	};
 	const handleResetPost = () => {
-		result.reset();
+		postAnalysisResult.reset();
 	};
 
 	return (
@@ -59,7 +64,7 @@ export default function Home() {
 			</Box>
 
 			{/* main content - analyze text tabs*/}
-			{result.isUninitialized && (
+			{postAnalysisResult.isUninitialized && (
 				<>
 					<Box>
 						<Paper>
@@ -117,7 +122,7 @@ export default function Home() {
 					</Box>
 				</>
 			)}
-			{result.isLoading && (
+			{postAnalysisResult.isLoading && (
 				<Card
 					paperProps={{
 						sx: {
@@ -129,17 +134,19 @@ export default function Home() {
 					<CircularProgress />
 				</Card>
 			)}
-			{result.isSuccess && (
+			{postAnalysisResult.isSuccess && (
 				<>
 					<Card>
 						<Typography variant='h5'>Resultados</Typography>
 					</Card>
 					<Card>
-						<AlgorithmScores scores={result.data.scores} />
+						<AlgorithmScores
+							scores={postAnalysisResult.data.scores}
+						/>
 					</Card>
 					<Card>
 						<Typography variant='h6'>Estadisticos</Typography>
-						{Object.entries(result.data.metrics).map(
+						{Object.entries(postAnalysisResult.data.metrics).map(
 							([key, value]) => {
 								return (
 									<Box key={key}>
@@ -154,7 +161,9 @@ export default function Home() {
 					<Card>
 						<Typography variant='h6'>Texto original</Typography>
 						<Card paperProps={{ elevation: 3 }}>
-							<Typography>{result.originalArgs?.text}</Typography>
+							<Typography>
+								{postAnalysisResult.originalArgs?.text}
+							</Typography>
 						</Card>
 					</Card>
 					<Card
@@ -175,16 +184,16 @@ export default function Home() {
 					</Card>
 				</>
 			)}
-			{result.isError && (
+			{postAnalysisResult.isError && (
 				<>
 					<Card>
 						<Typography variant='h5'>Error!</Typography>
 					</Card>
 					<Card>
 						<Typography>
-							{'status' in result.error
-								? JSON.stringify(result.error.data)
-								: JSON.stringify(result.error)}
+							{'status' in postAnalysisResult.error
+								? JSON.stringify(postAnalysisResult.error.data)
+								: JSON.stringify(postAnalysisResult.error)}
 						</Typography>
 					</Card>
 				</>
