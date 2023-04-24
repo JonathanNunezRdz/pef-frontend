@@ -19,3 +19,8 @@ export interface PostAnalysisWithFileDto {
 	numOfSamples: number;
 	documentLoaded: boolean;
 }
+
+export interface PostAnalysisWithUrlDto {
+	numOfSamples: number;
+	url: string;
+}

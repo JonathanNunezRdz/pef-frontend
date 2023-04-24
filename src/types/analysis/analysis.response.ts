@@ -9,6 +9,7 @@ export type AnalysisResponse = {
 
 	scores: BaseAlgorithmScore[];
 	metrics: Metrics;
+	originalText: string;
 };
 
 export type PostAnalysisResponse = AnalysisResponse;

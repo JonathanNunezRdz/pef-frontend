@@ -14,14 +14,11 @@ import Card from '@/components/common/Card';
 import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
 import { PostAnalysisDto } from '@/types';
 
-interface RawTextTabPanelProps {
-	postAnalysis: ReturnType<typeof useAddAnalysisMutation>[0];
-}
+interface RawTextTabPanelProps {}
 
-export default function RawTextTabPanel({
-	postAnalysis,
-}: RawTextTabPanelProps) {
-	// redux hooks
+export default function RawTextTabPanel({}: RawTextTabPanelProps) {
+	// rtk hooks
+	const [postAnalysis] = useAddAnalysisMutation({ fixedCacheKey: 'raw' });
 
 	// react hook form
 	const { control, handleSubmit } = useForm<PostAnalysisDto>({

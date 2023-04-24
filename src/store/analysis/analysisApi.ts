@@ -2,6 +2,7 @@ import {
 	AnalysisResponse,
 	PostAnalysisDto,
 	PostAnalysisWithFileThunk,
+	PostAnalysisWithUrlDto,
 } from '@/types';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
@@ -24,7 +25,7 @@ export const analysisApi = createApi({
 					body,
 				};
 			},
-			invalidatesTags: [{ type: 'Analysis', id: 'LIST' }],
+			invalidatesTags: [{ type: 'Analysis', id: 'RAW' }],
 		}),
 		addAnalysisWithFile: build.mutation<
 			AnalysisResponse,
@@ -41,9 +42,26 @@ export const analysisApi = createApi({
 					body: bodyFormData,
 				};
 			},
+			invalidatesTags: [{ type: 'Analysis', id: 'FILE' }],
+		}),
+		addAnalysisWithUrl: build.mutation<
+			AnalysisResponse,
+			PostAnalysisWithUrlDto
+		>({
+			query(body) {
+				return {
+					url: 'url',
+					method: 'POST',
+					body,
+				};
+			},
+			invalidatesTags: [{ type: 'Analysis', id: 'URL' }],
 		}),
 	}),
 });
 
-export const { useAddAnalysisMutation, useAddAnalysisWithFileMutation } =
-	analysisApi;
+export const {
+	useAddAnalysisMutation,
+	useAddAnalysisWithFileMutation,
+	useAddAnalysisWithUrlMutation,
+} = analysisApi;

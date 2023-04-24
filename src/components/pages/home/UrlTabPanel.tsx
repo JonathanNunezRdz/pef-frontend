@@ -13,21 +13,24 @@ import {
 	FieldValues,
 } from 'react-hook-form';
 import { validateUrl } from '@/utils';
+import { useAddAnalysisWithUrlMutation } from '@/store/analysis/analysisApi';
+import { PostAnalysisWithUrlDto } from '@/types';
 
 interface UrlTabPanelProps {}
 
-interface FormInputs {
-	url: string;
-}
-
 export default function UrlTabPanel({}: UrlTabPanelProps) {
-	// hooks
-	const { control, handleSubmit } = useForm<FormInputs>({
+	// rtk hooks
+	const [postAnalysisWithUrl] = useAddAnalysisWithUrlMutation({
+		fixedCacheKey: 'url',
+	});
+	// react-hook-form
+	const { control, handleSubmit } = useForm<PostAnalysisWithUrlDto>({
 		defaultValues: {
 			url: '',
+			numOfSamples: 10,
 		},
 		resolver: (values) => {
-			const errors: FieldErrors<FormInputs> = {};
+			const errors: FieldErrors<PostAnalysisWithUrlDto> = {};
 			const validValues: FieldValues = values;
 			const url = values.url.trim();
 			if (url === '') {
@@ -49,8 +52,8 @@ export default function UrlTabPanel({}: UrlTabPanelProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<FormInputs> = (data) => {
-		console.log(data);
+	const onSubmit: SubmitHandler<PostAnalysisWithUrlDto> = (data) => {
+		postAnalysisWithUrl(data);
 	};
 
 	// effects

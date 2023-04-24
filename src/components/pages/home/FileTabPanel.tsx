@@ -3,17 +3,8 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
 import { ChangeEvent, useState } from 'react';
-import {
-	Avatar,
-	FormHelperText,
-	List,
-	ListItem,
-	ListItemAvatar,
-	ListItemText,
-	Typography,
-} from '@mui/material';
+import { FormHelperText, Typography } from '@mui/material';
 import {
 	FieldErrors,
 	FieldValues,
@@ -23,13 +14,13 @@ import {
 import { PostAnalysisWithFileDto } from '@/types';
 import { useAddAnalysisWithFileMutation } from '@/store/analysis/analysisApi';
 
-interface FileTabPanelProps {
-	postAnalysisWithFile: ReturnType<typeof useAddAnalysisWithFileMutation>[0];
-}
+interface FileTabPanelProps {}
 
-export default function FileTabPanel({
-	postAnalysisWithFile,
-}: FileTabPanelProps) {
+export default function FileTabPanel({}: FileTabPanelProps) {
+	// rtk hooks
+	const [postAnalysisWithFile] = useAddAnalysisWithFileMutation({
+		fixedCacheKey: 'file',
+	});
 	// react hooks
 	const [document, setDocument] = useState<File>();
 
