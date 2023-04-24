@@ -13,8 +13,11 @@ import {
 	useAddAnalysisWithUrlMutation,
 } from '@/store/analysis/analysisApi';
 import Logo from '../../../../public/static/images/logo/logo_white.png';
-import { AnalysisResult } from '@/types';
+import { AnalysisErrorResponse, AnalysisResult } from '@/types';
 import ShowAnalysisResult from './ShowAnalysisResult';
+import { parseErrorResponse } from '@/utils';
+import AnalysisError from './AnalysisError';
+import HomeTitle from './HomeTitle';
 
 export default function Home() {
 	// redux hooks
@@ -49,7 +52,15 @@ export default function Home() {
 			return postAnalysisWithUrlResult.data;
 		return undefined;
 	})();
-	const activeError = (() => {})();
+	const activeError: AnalysisErrorResponse | false = (() => {
+		if (postAnalysisResult.isError)
+			return parseErrorResponse(postAnalysisResult.error);
+		if (postAnalysisWithFileResult.isError)
+			return parseErrorResponse(postAnalysisWithFileResult.error);
+		if (postAnalysisWithUrlResult.isError)
+			return parseErrorResponse(postAnalysisWithUrlResult.error);
+		return false;
+	})();
 
 	// functions
 	const handleResetPost = () => {
@@ -61,25 +72,7 @@ export default function Home() {
 	return (
 		<Stack direction='column' spacing='1rem'>
 			{/* page title */}
-			<Box>
-				<Box display='flex' alignItems='end' gap='1rem'>
-					<Box>
-						<Image
-							src={Logo}
-							alt='logo de la aplicacion'
-							height={Logo.height * 0.5}
-							width={Logo.width * 0.5}
-						/>
-					</Box>
-					<Typography
-						variant='subtitle1'
-						color={(theme) => theme.palette.text.disabled}
-					>
-						Analizador de legibilidad de texto en español
-						castellano.
-					</Typography>
-				</Box>
-			</Box>
+			<HomeTitle />
 
 			{/* main content - analyze text tabs*/}
 			{showTabs() && <AnalyzeTabs />}
@@ -107,20 +100,7 @@ export default function Home() {
 			)}
 
 			{/* show error */}
-			{postAnalysisResult.isError && (
-				<>
-					<Card>
-						<Typography variant='h5'>Error!</Typography>
-					</Card>
-					<Card>
-						<Typography>
-							{'status' in postAnalysisResult.error
-								? JSON.stringify(postAnalysisResult.error.data)
-								: JSON.stringify(postAnalysisResult.error)}
-						</Typography>
-					</Card>
-				</>
-			)}
+			{activeError && <AnalysisError error={activeError} />}
 		</Stack>
 	);
 }

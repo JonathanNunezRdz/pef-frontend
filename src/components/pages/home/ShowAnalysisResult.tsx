@@ -2,6 +2,7 @@ import Card from '@/components/common/Card';
 import { AnalysisResponse } from '@/types';
 import { Box, Button, Typography } from '@mui/material';
 import AlgorithmScores from './AlgorithmScores';
+import { Fragment } from 'react';
 
 interface ShowAnalysisResultProps {
 	result: AnalysisResponse;
@@ -13,7 +14,7 @@ export default function ShowAnalysisResult({
 	handleResetAnalysis,
 }: ShowAnalysisResultProps) {
 	return (
-		<Box>
+		<Fragment>
 			<Card>
 				<Typography variant='h5'>Resultados</Typography>
 			</Card>
@@ -54,6 +55,6 @@ export default function ShowAnalysisResult({
 					Hacer otro analisis
 				</Button>
 			</Card>
-		</Box>
+		</Fragment>
 	);
 }
