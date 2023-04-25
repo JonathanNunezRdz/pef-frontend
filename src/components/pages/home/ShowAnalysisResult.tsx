@@ -18,8 +18,25 @@ export default function ShowAnalysisResult({
 			<Card>
 				<Typography variant='h5'>Resultados</Typography>
 			</Card>
+
 			<Card>
 				<AlgorithmScores scores={result.scores} />
+			</Card>
+			<Card
+				paperProps={{
+					sx: {
+						flexDirection: 'row-reverse',
+						display: 'flex',
+					},
+				}}
+			>
+				<Button
+					onClick={handleResetAnalysis}
+					variant='contained'
+					color='secondary'
+				>
+					Hacer otro análisis
+				</Button>
 			</Card>
 			<Card>
 				<Typography variant='h6'>Estadisticos</Typography>
@@ -52,7 +69,7 @@ export default function ShowAnalysisResult({
 					variant='contained'
 					color='secondary'
 				>
-					Hacer otro analisis
+					Hacer otro análisis
 				</Button>
 			</Card>
 		</Fragment>
