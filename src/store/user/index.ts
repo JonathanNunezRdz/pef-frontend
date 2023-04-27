@@ -1,11 +1,12 @@
 export * from './selectors';
 
-import { User, UserState } from '@/types';
+import { UserState } from '@/types';
 import { createSlice } from '@reduxjs/toolkit';
+import { signInAction } from './actions';
 
 const initialState: UserState = {
 	user: {
-		data: {} as User,
+		data: {} as UserState['user']['data'],
 		status: 'idle',
 		error: undefined,
 	},
@@ -26,25 +27,23 @@ const initialState: UserState = {
 export const userSlice = createSlice({
 	name: 'user',
 	initialState,
-	reducers: {
-		testLoginAction: (state) => {
-			state.auth.isLoggedIn = true;
-			state.user.data = {
-				email: 'jonathan.nunez@udem.edu',
-				firstName: 'Jonathan',
-				lastName: 'Nunez',
-				id: '6fae0713-16e9-480a-8e8a-8e2c6c28cdeb',
-			};
-		},
-		testLogoutAction: (state) => {
-			state.auth.isLoggedIn = false;
-			state.user.data = {} as User;
-		},
+	reducers: {},
+	extraReducers(builder) {
+		builder
+			.addCase(signInAction.pending, (state) => {
+				state.signIn.status = 'loading';
+			})
+			.addCase(signInAction.fulfilled, (state, action) => {
+				// setJWT in browser
+				state.signIn.status = 'succeeded';
+				state.signIn.error = undefined;
+				state.auth.isLoggedIn = true;
+			});
 	},
 });
 
 const userReducer = userSlice.reducer;
 
-export const { testLoginAction, testLogoutAction } = userSlice.actions;
+// export const {  } = userSlice.actions;
 
 export default userReducer;

@@ -13,7 +13,7 @@ import {
 	FieldValues,
 } from 'react-hook-form';
 import { validateUrl } from '@/utils';
-import { useAddAnalysisWithUrlMutation } from '@/store/analysis/analysisApi';
+import { useAddAnalysisWithUrlMutation } from '@/store/analysis';
 import { PostAnalysisWithUrlDto } from '@/types';
 
 interface UrlTabPanelProps {}

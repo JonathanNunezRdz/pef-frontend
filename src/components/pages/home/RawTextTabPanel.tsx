@@ -11,7 +11,7 @@ import {
 	FieldValues,
 } from 'react-hook-form';
 import Card from '@/components/common/Card';
-import { useAddAnalysisMutation } from '@/store/analysis/analysisApi';
+import { useAddAnalysisMutation } from '@/store/analysis';
 import { PostAnalysisDto } from '@/types';
 
 interface RawTextTabPanelProps {}

@@ -1,8 +1,5 @@
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import Image from 'next/image';
 
 import AnalyzeTabs from './AnalyzeTabs';
 
@@ -11,8 +8,8 @@ import {
 	useAddAnalysisMutation,
 	useAddAnalysisWithFileMutation,
 	useAddAnalysisWithUrlMutation,
-} from '@/store/analysis/analysisApi';
-import Logo from '../../../../public/static/images/logo/logo_white.png';
+} from '@/store/analysis';
+
 import { AnalysisErrorResponse, AnalysisResult } from '@/types';
 import ShowAnalysisResult from './ShowAnalysisResult';
 import { parseErrorResponse } from '@/utils';
@@ -100,7 +97,12 @@ export default function Home() {
 			)}
 
 			{/* show error */}
-			{activeError && <AnalysisError error={activeError} />}
+			{activeError && (
+				<AnalysisError
+					error={activeError}
+					handleResetAnalysis={handleResetPost}
+				/>
+			)}
 		</Stack>
 	);
 }

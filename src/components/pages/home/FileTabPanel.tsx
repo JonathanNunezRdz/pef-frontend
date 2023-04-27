@@ -12,7 +12,10 @@ import {
 	useForm,
 } from 'react-hook-form';
 import { PostAnalysisWithFileDto } from '@/types';
-import { useAddAnalysisWithFileMutation } from '@/store/analysis/analysisApi';
+import { useAddAnalysisWithFileMutation } from '@/store/analysis';
+
+const mimeTypeRegexp =
+	/(application\/pdf|text\/plain|application\/msword|application\/vnd.openxmlformats-officedocument.wordprocessingml.document)/;
 
 interface FileTabPanelProps {}
 
@@ -57,7 +60,7 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 		const { files } = event.currentTarget;
 		if (!files || !files[0]) return;
 		const format = files[0].type;
-		if (!/(application\/pdf|text\/plain)/.test(format)) return;
+		if (!mimeTypeRegexp.test(format)) return;
 		setDocument(files[0]);
 		setValue('documentLoaded', true);
 	};
