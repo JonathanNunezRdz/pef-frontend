@@ -12,7 +12,6 @@ import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
 import { useRouter } from 'next/router';
 import { useAppSelector, useLinks, useAppMediaQuery } from '@/hooks';
-import { selectAuth } from '@/store/user';
 
 export type Page = {
 	route: string;
@@ -26,7 +25,7 @@ const generalLinks: Page[] = [
 
 export default function Header() {
 	// redux hooks
-	const { isLoggedIn } = useAppSelector(selectAuth);
+	const isLoggedIn = false; // PENDING_CHANGE -> use actual logged status
 
 	// next hooks
 	const router = useRouter();

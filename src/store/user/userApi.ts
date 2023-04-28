@@ -1,4 +1,4 @@
-import { SignInDto, SignInResponse } from '@/types';
+import { GetUserResponse } from '@/types';
 import { BASE_URL } from '@/utils';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
@@ -11,12 +11,14 @@ export const userApi = createApi({
 	}),
 	tagTypes: ['User'],
 	endpoints: (build) => ({
-		signIn: build.mutation<SignInResponse, SignInDto>({
-			query(body) {
+		getMe: build.query<GetUserResponse, void>({
+			query() {
 				return {
-					url: ``,
+					url: '',
 				};
 			},
 		}),
 	}),
 });
+
+export const { useGetMeQuery } = userApi;
