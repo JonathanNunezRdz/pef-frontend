@@ -1,5 +1,5 @@
-import { User } from '@prisma/client';
 import { IsEmail, IsString } from 'class-validator';
+import { User } from '.';
 
 export class PostUserDto {
 	@IsEmail()
