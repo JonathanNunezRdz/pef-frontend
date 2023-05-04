@@ -11,3 +11,7 @@ export type PatchUserResponse = UserResponse;
 export type SignInResponse = {
 	accessToken: string;
 };
+
+export type SignUpResponse = {
+	accessToken: string;
+};

@@ -2,7 +2,9 @@ import { HttpError } from '@/types';
 import { AxiosError } from 'axios';
 
 export * from './createEmotionCache';
+export * from './jwtUtils';
 export * from './loadDocument';
+export * from './match.decorator';
 export * from './parseErrorResponse';
 export * from './validateUrl';
 

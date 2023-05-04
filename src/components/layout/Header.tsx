@@ -12,6 +12,7 @@ import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
 import { useRouter } from 'next/router';
 import { useAppSelector, useLinks, useAppMediaQuery } from '@/hooks';
+import { selectAuth } from '@/store/auth/authReducer';
 
 export type Page = {
 	route: string;
@@ -25,7 +26,7 @@ const generalLinks: Page[] = [
 
 export default function Header() {
 	// redux hooks
-	const isLoggedIn = false; // PENDING_CHANGE -> use actual logged status
+	const { isLoggedIn } = useAppSelector(selectAuth);
 
 	// next hooks
 	const router = useRouter();
@@ -116,6 +117,7 @@ export default function Header() {
 									{link.label}
 								</MenuItem>
 							))}
+							{/* add log out button */}
 						</Menu>
 					</Box>
 
@@ -151,6 +153,7 @@ export default function Header() {
 								{link.label}
 							</Link>
 						))}
+						{/* add log out button */}
 					</Box>
 
 					<Box sx={{ flexGrow: 0, display: flexOnMobile(true) }}>
@@ -178,6 +181,7 @@ export default function Header() {
 								{link.label}
 							</Link>
 						))}
+						{/* add log out button */}
 					</Box>
 				</Toolbar>
 			</Box>

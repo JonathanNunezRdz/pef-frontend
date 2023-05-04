@@ -1,4 +1,4 @@
-import { SignInDto, SignInResponse } from '@/types';
+import { SignInDto, SignInResponse, SignUpDto, SignUpResponse } from '@/types';
 import { BASE_URL } from '@/utils';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
 
@@ -28,7 +28,17 @@ export const authApi = createApi({
 				};
 			},
 		}),
+		signUp: build.mutation<SignUpResponse, SignUpDto>({
+			query(body) {
+				return {
+					url: 'signup',
+					body,
+					method: 'POST',
+				};
+			},
+		}),
 	}),
 });
 
-export const { useSignInMutation, useSignOutMutation } = authApi;
+export const { useSignInMutation, useSignOutMutation, useSignUpMutation } =
+	authApi;

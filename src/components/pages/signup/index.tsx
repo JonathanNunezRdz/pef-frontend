@@ -1,5 +1,5 @@
-import { useSignInMutation } from '@/store/auth';
-import { SignInDto } from '@/types';
+import { useSignUpMutation } from '@/store/auth';
+import { SignUpFields } from '@/types';
 import {
 	Box,
 	Button,
@@ -17,21 +17,14 @@ import EmailIcon from '@mui/icons-material/Email';
 import PasswordIcon from '@mui/icons-material/Password';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { parseErrorResponse } from '@/utils';
-import { useAppDispatch, useAppSelector } from '@/hooks';
-import { selectAuth, setCredentials } from '@/store/auth/authReducer';
-import { useRouter } from 'next/router';
 
-interface SignInProps {}
+interface SignUpProps {}
 
-export default function SignIn({}: SignInProps) {
-	// nextjs hooks
-	const router = useRouter();
+export default function SignUp({}: SignUpProps) {
 	// rtk hooks
-	const dispatch = useAppDispatch();
-	const { isLoggedIn } = useAppSelector(selectAuth);
-	const [signIn, signInResult] = useSignInMutation();
+	const [signUp, signUpResult] = useSignUpMutation();
 
 	// react hooks
 	const [showPassword, setShowPassword] = useState(false);
@@ -41,25 +34,21 @@ export default function SignIn({}: SignInProps) {
 		handleSubmit,
 		register,
 		formState: { errors },
-	} = useForm<SignInDto>({
+	} = useForm<SignUpFields>({
 		defaultValues: {
+			firstName: '',
+			lastName: '',
 			email: '',
 			password: '',
+			confirmPassword: '',
 		},
-		resolver: classValidatorResolver(SignInDto),
+		resolver: classValidatorResolver(SignUpFields),
 	});
 
-	const onSubmit: SubmitHandler<SignInDto> = async (data) => {
-		const res = await signIn(data).unwrap();
-		dispatch(setCredentials(res));
+	const onSubmit: SubmitHandler<SignUpFields> = async (data) => {
+		signUp(data);
 	};
 	const handleToggleShowPassword = () => setShowPassword((show) => !show);
-
-	useEffect(() => {
-		if (isLoggedIn && router.isReady) {
-			router.push('/');
-		}
-	}, [isLoggedIn, router]);
 
 	return (
 		<Stack direction='column' spacing={4}>
@@ -77,6 +66,34 @@ export default function SignIn({}: SignInProps) {
 					{/* CHANGE_PENDING -> add error and loading states */}
 					<form onSubmit={handleSubmit(onSubmit)} noValidate>
 						<Stack direction='column' spacing={4}>
+							<TextField
+								{...register('firstName')}
+								label='Nombre'
+								error={Boolean(errors.firstName)}
+								helperText={
+									errors.firstName && errors.firstName.message
+								}
+								FormHelperTextProps={{
+									sx: {
+										fontSize: 20,
+									},
+								}}
+							/>
+
+							<TextField
+								{...register('lastName')}
+								label='Apellido'
+								error={Boolean(errors.lastName)}
+								helperText={
+									errors.lastName && errors.lastName.message
+								}
+								FormHelperTextProps={{
+									sx: {
+										fontSize: 20,
+									},
+								}}
+							/>
+
 							<TextField
 								{...register('email')}
 								label='Correo electrónico'
@@ -138,26 +155,56 @@ export default function SignIn({}: SignInProps) {
 								}}
 							/>
 
+							<TextField
+								{...register('confirmPassword')}
+								label='Confirmar contraseña'
+								type={showPassword ? 'text' : 'password'}
+								error={Boolean(errors.confirmPassword)}
+								helperText={
+									errors.confirmPassword &&
+									errors.confirmPassword.message
+								}
+								InputProps={{
+									startAdornment: (
+										<InputAdornment position='start'>
+											<PasswordIcon />
+										</InputAdornment>
+									),
+									endAdornment: (
+										<InputAdornment position='end'>
+											<IconButton
+												aria-label='activar o desactivar visibilidad de contraseña'
+												onClick={
+													handleToggleShowPassword
+												}
+												edge='end'
+											>
+												{showPassword ? (
+													<VisibilityOffIcon />
+												) : (
+													<VisibilityIcon />
+												)}
+											</IconButton>
+										</InputAdornment>
+									),
+								}}
+								FormHelperTextProps={{
+									sx: {
+										fontSize: 20,
+									},
+								}}
+							/>
+
 							{/* style error message correctly */}
-							{signInResult.isError && (
-								// <Box>
-								// 	<Typography textTransform='capitalize'>
-								// 		{
-								// 			parseErrorResponse(
-								// 				signInResult.error
-								// 			).message
-								// 		}
-								// 	</Typography>
-								// </Box>
+							{signUpResult.isError && (
 								<FormHelperText
-									error={signInResult.isError}
+									error={signUpResult.isError}
 									sx={{
 										fontSize: 20,
-										textTransform: 'capitalize',
 									}}
 								>
 									{
-										parseErrorResponse(signInResult.error)
+										parseErrorResponse(signUpResult.error)
 											.message
 									}
 								</FormHelperText>
@@ -168,7 +215,7 @@ export default function SignIn({}: SignInProps) {
 								variant='contained'
 								color='secondary'
 							>
-								Entrar
+								Crear cuenta
 							</Button>
 						</Stack>
 					</form>

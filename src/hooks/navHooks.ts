@@ -7,7 +7,6 @@ import { Page } from '@/components/layout/Header';
 const loggedInLinks: Page[] = [
 	{ route: '/historial', label: 'Historial' },
 	{ route: '/mi_cuenta', label: 'Mi cuenta' },
-	{ route: '/', label: 'Cerrar sesión' },
 ];
 
 /**
