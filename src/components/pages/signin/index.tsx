@@ -1,33 +1,34 @@
-import { useSignInMutation } from '@/store/auth';
-import { SignInDto } from '@/types';
-import {
-	Box,
-	Button,
-	IconButton,
-	InputAdornment,
-	Paper,
-	Stack,
-	TextField,
-	Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import CircularProgress from '@mui/material/CircularProgress';
 import EmailIcon from '@mui/icons-material/Email';
 import PasswordIcon from '@mui/icons-material/Password';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
+import { useSignInMutation } from '@/store/auth';
+import { SignInDto } from '@/types';
 import { parseErrorResponse } from '@/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { selectAuth, setCredentials } from '@/store/auth/authReducer';
-import { useRouter } from 'next/router';
 
 interface SignInProps {}
 
 export default function SignIn({}: SignInProps) {
 	// nextjs hooks
 	const router = useRouter();
+
 	// rtk hooks
 	const dispatch = useAppDispatch();
 	const { isLoggedIn } = useAppSelector(selectAuth);
@@ -50,8 +51,7 @@ export default function SignIn({}: SignInProps) {
 	});
 
 	const onSubmit: SubmitHandler<SignInDto> = async (data) => {
-		const res = await signIn(data).unwrap();
-		dispatch(setCredentials(res));
+		signIn(data);
 	};
 	const handleToggleShowPassword = () => setShowPassword((show) => !show);
 
@@ -61,6 +61,12 @@ export default function SignIn({}: SignInProps) {
 		}
 	}, [isLoggedIn, router]);
 
+	useEffect(() => {
+		if (signInResult.isSuccess) {
+			dispatch(setCredentials(signInResult.data));
+		}
+	}, [dispatch, signInResult.isSuccess, signInResult.data]);
+
 	return (
 		<Stack direction='column' spacing={4}>
 			{/* start title */}
@@ -69,7 +75,7 @@ export default function SignIn({}: SignInProps) {
 					<Typography variant='h3'>Iniciar Sesión</Typography>
 				</Box>
 			</Box>
-			{/* end tiitle */}
+			{/* end title */}
 
 			{/* start sign in form */}
 			<Box>
@@ -138,17 +144,14 @@ export default function SignIn({}: SignInProps) {
 								}}
 							/>
 
+							{signInResult.isLoading && (
+								<Box display='flex' justifyContent='center'>
+									<CircularProgress />
+								</Box>
+							)}
+
 							{/* style error message correctly */}
 							{signInResult.isError && (
-								// <Box>
-								// 	<Typography textTransform='capitalize'>
-								// 		{
-								// 			parseErrorResponse(
-								// 				signInResult.error
-								// 			).message
-								// 		}
-								// 	</Typography>
-								// </Box>
 								<FormHelperText
 									error={signInResult.isError}
 									sx={{
@@ -167,8 +170,11 @@ export default function SignIn({}: SignInProps) {
 								type='submit'
 								variant='contained'
 								color='secondary'
+								disabled={signInResult.isLoading}
 							>
-								Entrar
+								{signInResult.isLoading
+									? 'Cargando...'
+									: 'Entrar'}
 							</Button>
 						</Stack>
 					</form>

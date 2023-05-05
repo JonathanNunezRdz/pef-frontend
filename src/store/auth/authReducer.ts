@@ -1,4 +1,4 @@
-import { setJWT, validateJWT } from '@/utils';
+import { invalidateJWT, setJWT, validateJWT } from '@/utils';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '..';
 
@@ -19,8 +19,6 @@ const auth = createSlice({
 	initialState,
 	reducers: {
 		getLoggedStatus: (state) => {
-			console.log('checking jwt');
-
 			const status = validateJWT();
 			if (status.valid) {
 				state.token = status.jwt;
@@ -40,10 +38,16 @@ const auth = createSlice({
 			state.isLoggedIn = true;
 			state.checkedToken = true;
 		},
+		signOut: (state) => {
+			invalidateJWT();
+			state.token = null;
+			state.isLoggedIn = false;
+			state.checkedToken = true;
+		},
 	},
 });
 
-export const { getLoggedStatus, setCredentials } = auth.actions;
+export const { getLoggedStatus, setCredentials, signOut } = auth.actions;
 
 export default auth.reducer;
 

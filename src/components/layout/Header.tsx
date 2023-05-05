@@ -1,18 +1,23 @@
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-// import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
+import Button from '@mui/material/Button';
 import { MouseEvent, useState } from 'react';
+import { useRouter } from 'next/router';
+import {
+	useAppSelector,
+	useLinks,
+	useAppMediaQuery,
+	useAppDispatch,
+} from '@/hooks';
+import { selectAuth, signOut } from '@/store/auth/authReducer';
 
 import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
-import { useRouter } from 'next/router';
-import { useAppSelector, useLinks, useAppMediaQuery } from '@/hooks';
-import { selectAuth } from '@/store/auth/authReducer';
 
 export type Page = {
 	route: string;
@@ -26,6 +31,7 @@ const generalLinks: Page[] = [
 
 export default function Header() {
 	// redux hooks
+	const dispatch = useAppDispatch();
 	const { isLoggedIn } = useAppSelector(selectAuth);
 
 	// next hooks
@@ -153,10 +159,15 @@ export default function Header() {
 								{link.label}
 							</Link>
 						))}
-						{/* add log out button */}
 					</Box>
 
-					<Box sx={{ flexGrow: 0, display: flexOnMobile(true) }}>
+					<Box
+						sx={{
+							flexGrow: 0,
+							display: flexOnMobile(true),
+							alignItems: 'center',
+						}}
+					>
 						{links.map((link) => (
 							<Link
 								key={link.route}
@@ -181,6 +192,22 @@ export default function Header() {
 								{link.label}
 							</Link>
 						))}
+						{isLoggedIn && (
+							<Button
+								variant='text'
+								color='inherit'
+								sx={{
+									mx: '0.5rem',
+									py: '0.25rem',
+									px: '0.5rem',
+									borderRadius: '10px',
+									fontWeight: 'inherit',
+								}}
+								onClick={() => dispatch(signOut())}
+							>
+								Cerrar sesión
+							</Button>
+						)}
 						{/* add log out button */}
 					</Box>
 				</Toolbar>

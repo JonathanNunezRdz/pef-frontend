@@ -1,29 +1,36 @@
-import { useSignUpMutation } from '@/store/auth';
-import { SignUpFields } from '@/types';
-import {
-	Box,
-	Button,
-	IconButton,
-	InputAdornment,
-	Paper,
-	Stack,
-	TextField,
-	Typography,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import InputAdornment from '@mui/material/InputAdornment';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 import FormHelperText from '@mui/material/FormHelperText';
-import { SubmitHandler, useForm } from 'react-hook-form';
-import { classValidatorResolver } from '@hookform/resolvers/class-validator';
 import EmailIcon from '@mui/icons-material/Email';
 import PasswordIcon from '@mui/icons-material/Password';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { useState } from 'react';
+import { classValidatorResolver } from '@hookform/resolvers/class-validator';
+import { SubmitHandler, useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+
+import { useSignUpMutation } from '@/store/auth';
+import { SignUpFields } from '@/types';
 import { parseErrorResponse } from '@/utils';
+import { useAppDispatch, useAppSelector } from '@/hooks';
+import { selectAuth, setCredentials } from '@/store/auth/authReducer';
 
 interface SignUpProps {}
 
 export default function SignUp({}: SignUpProps) {
+	// nextjs hooks
+	const router = useRouter();
+
 	// rtk hooks
+	const dispatch = useAppDispatch();
+	const { isLoggedIn } = useAppSelector(selectAuth);
 	const [signUp, signUpResult] = useSignUpMutation();
 
 	// react hooks
@@ -46,16 +53,26 @@ export default function SignUp({}: SignUpProps) {
 	});
 
 	const onSubmit: SubmitHandler<SignUpFields> = async (data) => {
-		signUp(data);
+		try {
+			const res = await signUp(data).unwrap();
+			dispatch(setCredentials(res));
+		} catch (error) {}
 	};
 	const handleToggleShowPassword = () => setShowPassword((show) => !show);
+
+	// effects
+	useEffect(() => {
+		if (isLoggedIn && router.isReady) {
+			router.push('/');
+		}
+	}, [isLoggedIn, router]);
 
 	return (
 		<Stack direction='column' spacing={4}>
 			{/* start title */}
 			<Box>
 				<Box display='flex' alignItems='end' gap={4}>
-					<Typography variant='h3'>Iniciar Sesión</Typography>
+					<Typography variant='h3'>Crear Cuenta</Typography>
 				</Box>
 			</Box>
 			{/* end tiitle */}

@@ -19,8 +19,6 @@ export default function Layout({ children }: LayoutProps) {
 
 	useEffect(() => {
 		if (!checkedToken && !isLoggedIn) {
-			console.log('dispatch getLoggedStatus');
-
 			dispatch(getLoggedStatus());
 		}
 	}, [checkedToken, isLoggedIn, dispatch]);
