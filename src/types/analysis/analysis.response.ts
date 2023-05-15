@@ -13,3 +13,25 @@ export type AnalysisResponse = {
 };
 
 export type PostAnalysisResponse = AnalysisResponse;
+
+export type GetAnalysisResponse = {
+	data: {
+		id: string;
+		createdAt: Date;
+
+		description: string;
+
+		scores: {
+			id: string;
+			value: number;
+			dificulty: string | null;
+
+			algorithm: {
+				name: string;
+				unit: string;
+				max: number;
+			};
+		}[];
+	}[];
+	totalAnalysis: number;
+};

@@ -1,11 +1,14 @@
 import {
 	AnalysisResponse,
+	GetAnalysisResponse,
 	PostAnalysisDto,
 	PostAnalysisWithFileThunk,
 	PostAnalysisWithUrlDto,
 } from '@/types';
+import { GetAnalysisDto } from '@/types/analysis/get-analysis.dto';
 import { BASE_URL } from '@/utils';
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { RootState } from '..';
 
 const analysisBaseUrl = `${BASE_URL}/api/analysis`;
 
@@ -13,6 +16,12 @@ export const analysisApi = createApi({
 	reducerPath: 'analysisApi',
 	baseQuery: fetchBaseQuery({
 		baseUrl: analysisBaseUrl,
+		prepareHeaders: (headers, { getState }) => {
+			const token = (getState() as RootState).auth.token;
+			if (token) headers.set('Authorization', `Bearer ${token}`);
+
+			return headers;
+		},
 	}),
 	tagTypes: ['Analysis'],
 	endpoints: (build) => ({
@@ -56,6 +65,15 @@ export const analysisApi = createApi({
 			},
 			invalidatesTags: [{ type: 'Analysis', id: 'URL' }],
 		}),
+		getAnalysis: build.query<GetAnalysisResponse, GetAnalysisDto>({
+			query(body) {
+				return {
+					url: '',
+					method: 'GET',
+					params: body,
+				};
+			},
+		}),
 	}),
 });
 
@@ -63,4 +81,5 @@ export const {
 	useAddAnalysisMutation,
 	useAddAnalysisWithFileMutation,
 	useAddAnalysisWithUrlMutation,
+	useGetAnalysisQuery,
 } = analysisApi;
