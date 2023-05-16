@@ -1,3 +1,3 @@
-import Historial from '@/components/pages/historial';
+import Historial from '@/components/pages/history';
 
 export default Historial;

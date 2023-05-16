@@ -2,8 +2,11 @@ import {
 	AnalysisResponse,
 	GetAnalysisResponse,
 	PostAnalysisDto,
+	PostAnalysisResponse,
 	PostAnalysisWithFileThunk,
 	PostAnalysisWithUrlDto,
+	SaveAnalysisDto,
+	SaveAnalysisResponse,
 } from '@/types';
 import { GetAnalysisDto } from '@/types/analysis/get-analysis.dto';
 import { BASE_URL } from '@/utils';
@@ -25,7 +28,17 @@ export const analysisApi = createApi({
 	}),
 	tagTypes: ['Analysis'],
 	endpoints: (build) => ({
-		addAnalysis: build.mutation<AnalysisResponse, PostAnalysisDto>({
+		saveAnalysis: build.mutation<SaveAnalysisResponse, SaveAnalysisDto>({
+			query(body) {
+				return {
+					url: `save`,
+					method: 'POST',
+					body,
+				};
+			},
+			invalidatesTags: [{ type: 'Analysis', id: 'RAW' }],
+		}),
+		addAnalysis: build.mutation<PostAnalysisResponse, PostAnalysisDto>({
 			query(body) {
 				return {
 					url: ``,
@@ -82,4 +95,5 @@ export const {
 	useAddAnalysisWithFileMutation,
 	useAddAnalysisWithUrlMutation,
 	useGetAnalysisQuery,
+	useSaveAnalysisMutation,
 } = analysisApi;

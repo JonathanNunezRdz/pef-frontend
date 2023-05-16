@@ -10,6 +10,12 @@ export class PostAnalysisDto {
 	numOfSamples: number;
 }
 
+export class SaveAnalysisDto extends PostAnalysisDto {
+	@IsString()
+	@IsOptional()
+	description?: string;
+}
+
 export interface PostAnalysisWithFileThunk {
 	numOfSamples: number;
 	document: File;

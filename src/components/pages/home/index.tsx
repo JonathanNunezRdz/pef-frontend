@@ -15,9 +15,12 @@ import ShowAnalysisResult from './ShowAnalysisResult';
 import { parseErrorResponse } from '@/utils';
 import AnalysisError from './AnalysisError';
 import HomeTitle from './HomeTitle';
+import { useAppSelector } from '@/hooks';
+import { selectAnalysisStatus } from '@/store/analysis/analysisReducer';
 
 export default function Home() {
 	// redux hooks
+	const { isLoading, data } = useAppSelector(selectAnalysisStatus);
 	const [, postAnalysisResult] = useAddAnalysisMutation({
 		fixedCacheKey: 'raw',
 	});
@@ -29,26 +32,6 @@ export default function Home() {
 	});
 
 	// react hooks
-	const showTabs = () => {
-		if (!postAnalysisResult.isUninitialized) return false;
-		if (!postAnalysisWithFileResult.isUninitialized) return false;
-		if (!postAnalysisWithUrlResult.isUninitialized) return false;
-		return true;
-	};
-	const showLoading = () => {
-		if (postAnalysisResult.isLoading) return true;
-		if (postAnalysisWithFileResult.isLoading) return true;
-		if (postAnalysisWithUrlResult.isLoading) return true;
-		return false;
-	};
-	const activeResult: AnalysisResult = (() => {
-		if (postAnalysisResult.isSuccess) return postAnalysisResult.data;
-		if (postAnalysisWithFileResult.isSuccess)
-			return postAnalysisWithFileResult.data;
-		if (postAnalysisWithUrlResult.isSuccess)
-			return postAnalysisWithUrlResult.data;
-		return undefined;
-	})();
 	const activeError: AnalysisErrorResponse | false = (() => {
 		if (postAnalysisResult.isError)
 			return parseErrorResponse(postAnalysisResult.error);
@@ -72,10 +55,10 @@ export default function Home() {
 			<HomeTitle />
 
 			{/* main content - analyze text tabs*/}
-			{showTabs() && <AnalyzeTabs />}
+			<AnalyzeTabs />
 
 			{/* loading component */}
-			{showLoading() && (
+			{isLoading && (
 				<Card
 					paperProps={{
 						sx: {
@@ -89,9 +72,9 @@ export default function Home() {
 			)}
 
 			{/* show analysis result */}
-			{activeResult && (
+			{data && (
 				<ShowAnalysisResult
-					result={activeResult}
+					result={data}
 					handleResetAnalysis={handleResetPost}
 				/>
 			)}

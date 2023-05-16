@@ -4,14 +4,22 @@ import LinkIcon from '@mui/icons-material/Link';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { Fragment, useState } from 'react';
 import ActiveTab from './ActiveTab';
+import { useAppSelector } from '@/hooks';
+import { selectAnalysisStatus } from '@/store/analysis/analysisReducer';
 
 interface AnalyzeTabsProps {}
 
 export default function AnalyzeTabs({}: AnalyzeTabsProps) {
+	// redux hooks
+	const { isUninitialized } = useAppSelector(selectAnalysisStatus);
+
 	const [currentTab, setCurrentTab] = useState('0');
 	const handleChangeTab = (event: React.SyntheticEvent, newValue: string) => {
 		setCurrentTab(newValue);
 	};
+
+	if (!isUninitialized) return <></>;
+
 	return (
 		<Fragment>
 			<Box>

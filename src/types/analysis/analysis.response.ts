@@ -14,6 +14,10 @@ export type AnalysisResponse = {
 
 export type PostAnalysisResponse = AnalysisResponse;
 
+export type SaveAnalysisResponse = AnalysisResponse & {
+	description: string;
+};
+
 export type GetAnalysisResponse = {
 	data: {
 		id: string;

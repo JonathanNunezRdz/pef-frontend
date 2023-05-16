@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import TabPanel from '@/components/common/TabPanel';
-import RawTextTabPanel from './RawTextTabPanel';
+import RawTextTabPanel from './RawText/RawTextTabPanel';
 import UrlTabPanel from './UrlTabPanel';
 import FileTabPanel from './FileTabPanel';
 
