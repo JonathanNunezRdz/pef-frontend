@@ -2,8 +2,6 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 
-import Logo from '../../../../public/static/images/logo/logo_white.png';
-
 interface HomeTitleProps {}
 
 export default function HomeTitle({}: HomeTitleProps) {
@@ -12,10 +10,10 @@ export default function HomeTitle({}: HomeTitleProps) {
 			<Box display='flex' alignItems='end' gap='1rem'>
 				<Box>
 					<Image
-						src={Logo}
-						alt='logo de la aplicacion'
-						height={Logo.height * 0.5}
-						width={Logo.width * 0.5}
+						src='/static/images/logo/logo_white.png'
+						alt='logo de la aplicación'
+						width={100}
+						height={55}
 					/>
 				</Box>
 				<Typography

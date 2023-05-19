@@ -1,58 +1,65 @@
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
+import FormHelperText from '@mui/material/FormHelperText';
+import Typography from '@mui/material/Typography';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
+import { useSaveAnalysisWithFileMutation } from '@/store/analysis';
+import { SaveAnalysisWithFileDto } from '@/types';
+import { mimeTypeRegexp } from '@/utils';
 import { ChangeEvent, useState } from 'react';
-import { FormHelperText, Typography } from '@mui/material';
 import {
+	Controller,
 	FieldErrors,
 	FieldValues,
 	SubmitHandler,
 	useForm,
 } from 'react-hook-form';
-import { PostAnalysisWithFileDto } from '@/types';
-import { useAddAnalysisWithFileMutation } from '@/store/analysis';
+import Card from '@/components/common/Card';
 
-const mimeTypeRegexp =
-	/(application\/pdf|text\/plain|application\/msword|application\/vnd.openxmlformats-officedocument.wordprocessingml.document)/;
+interface SaveFileFormProps {}
 
-interface FileTabPanelProps {}
-
-export default function FileTabPanel({}: FileTabPanelProps) {
+export default function SaveFileForm({}: SaveFileFormProps) {
 	// rtk hooks
-	const [postAnalysisWithFile] = useAddAnalysisWithFileMutation({
-		fixedCacheKey: 'file',
-	});
+	const [saveAnalysis] = useSaveAnalysisWithFileMutation();
+
 	// react hooks
 	const [document, setDocument] = useState<File>();
 
 	// react hook form
-	const { handleSubmit, setValue, watch } = useForm<PostAnalysisWithFileDto>({
-		defaultValues: {
-			numOfSamples: 10,
-			documentLoaded: false,
-		},
-		resolver: (values) => {
-			const errors: FieldErrors<PostAnalysisWithFileDto> = {};
-			const validValues: FieldValues = { ...values };
-			if (!values.documentLoaded) {
-				errors.documentLoaded = {
-					type: 'required',
-					message: 'Este campo es obligatorio',
+	const { control, handleSubmit, setValue, watch } =
+		useForm<SaveAnalysisWithFileDto>({
+			defaultValues: {
+				numOfSamples: 5,
+				documentLoaded: false,
+				description: '',
+			},
+			resolver: (values) => {
+				const errors: FieldErrors<SaveAnalysisWithFileDto> = {};
+				const validValues: FieldValues = { ...values };
+				if (!values.documentLoaded) {
+					errors.documentLoaded = {
+						type: 'required',
+						message: 'Este campo es obligatorio',
+					};
+				}
+				return {
+					values: validValues,
+					errors,
 				};
-			}
-			return {
-				values: validValues,
-				errors,
-			};
-		},
-	});
+			},
+		});
 
 	// functions
-	const onSubmit: SubmitHandler<PostAnalysisWithFileDto> = (data) => {
+	const onSubmit: SubmitHandler<SaveAnalysisWithFileDto> = (data) => {
 		if (!document) return;
-		postAnalysisWithFile({ document, numOfSamples: data.numOfSamples });
+		saveAnalysis({
+			document,
+			numOfSamples: data.numOfSamples,
+			description: data.description,
+		});
 	};
 	const handleDocumentChange = async (
 		event: ChangeEvent<HTMLInputElement>
@@ -65,9 +72,6 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 		setValue('documentLoaded', true);
 	};
 
-	// effects
-
-	// render
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
@@ -110,11 +114,34 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 						</Paper>
 					)}
 
-					<Paper
-						sx={{
-							p: '1rem',
-							flexDirection: 'row-reverse',
-							display: 'flex',
+					<Paper sx={{ p: '1rem' }}>
+						<Controller
+							control={control}
+							name='description'
+							render={({ field, fieldState: { error } }) => (
+								<TextField
+									ref={field.ref}
+									value={field.value}
+									onChange={field.onChange}
+									onBlur={field.onBlur}
+									inputProps={{
+										'aria-label': 'Título del análisis',
+									}}
+									label='Introduce un título para identificar este análisis'
+									error={Boolean(error)}
+									helperText={error?.message}
+									fullWidth
+								/>
+							)}
+						/>
+					</Paper>
+
+					<Card
+						paperProps={{
+							sx: {
+								flexDirection: 'row-reverse',
+								display: 'flex',
+							},
 						}}
 					>
 						<Button
@@ -124,7 +151,7 @@ export default function FileTabPanel({}: FileTabPanelProps) {
 						>
 							Analizar
 						</Button>
-					</Paper>
+					</Card>
 				</Stack>
 			</form>
 		</Box>

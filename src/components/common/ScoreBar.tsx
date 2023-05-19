@@ -1,3 +1,4 @@
+import { getColor } from '@/utils';
 import { Box, Typography } from '@mui/material';
 import LinearProgress, {
 	LinearProgressProps,
@@ -17,19 +18,13 @@ interface ScoreBarProps extends LinearProgressProps {
 export default function ScoreBar(props: ScoreBarProps) {
 	const { value, displayValue, ...rest } = props;
 	const realValue = Math.min(value, 100);
-	const getColor = () => {
-		if (realValue <= 20) return 'error';
-		if (realValue <= 40) return 'warning';
-		if (realValue <= 60) return 'mustard';
-		if (realValue <= 80) return 'lime';
-		return 'success';
-	};
+
 	return (
 		<Box sx={{ display: 'flex', alignItems: 'center' }}>
 			<Box sx={{ width: '100%', mr: displayValue ? 1 : undefined }}>
 				<LinearProgress
 					variant='determinate'
-					color={getColor()}
+					color={getColor(realValue)}
 					value={realValue}
 					{...rest}
 				/>

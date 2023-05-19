@@ -17,18 +17,19 @@ interface PostRawTextFormProps {}
 
 export default function PostRawTextForm({}: PostRawTextFormProps) {
 	// rtk hooks
-	const [postAnalysis] = useAddAnalysisMutation({ fixedCacheKey: 'raw' });
+	const [postAnalysis] = useAddAnalysisMutation();
 
 	// react hook form
 	const { control, handleSubmit } = useForm<PostAnalysisDto>({
 		defaultValues: {
 			text: '',
-			numOfSamples: 10,
+			numOfSamples: 5,
 		},
 		resolver: (values) => {
 			const errors: FieldErrors<PostAnalysisDto> = {};
 			const validValues: FieldValues = values;
-			if (values.text.trim() === '')
+			const text = values.text.trim();
+			if (text === '')
 				errors.text = {
 					type: 'required',
 					message: 'Este campo es obligatorio',
@@ -41,7 +42,7 @@ export default function PostRawTextForm({}: PostRawTextFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<PostAnalysisDto> = async (data) => {
+	const onSubmit: SubmitHandler<PostAnalysisDto> = (data) => {
 		postAnalysis(data);
 	};
 

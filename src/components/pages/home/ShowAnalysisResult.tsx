@@ -22,6 +22,7 @@ export default function ShowAnalysisResult({
 			<Card>
 				<AlgorithmScores scores={result.scores} />
 			</Card>
+
 			<Card
 				paperProps={{
 					sx: {
@@ -38,24 +39,27 @@ export default function ShowAnalysisResult({
 					Hacer otro análisis
 				</Button>
 			</Card>
+
 			<Card>
-				<Typography variant='h6'>Estadisticos</Typography>
-				{Object.entries(result.metrics).map(([key, value]) => {
-					return (
-						<Box key={key}>
-							<Typography>
-								{key}: {value.toFixed(2)}
-							</Typography>
-						</Box>
-					);
-				})}
+				<Typography variant='h6'>Estadísticos</Typography>
+				{result.metrics.map((metric) => (
+					<Box key={metric.name}>
+						<Typography>
+							{metric.readableName}: {metric.value.toFixed(2)}
+						</Typography>
+					</Box>
+				))}
 			</Card>
-			<Card>
-				<Typography variant='h6'>Texto original</Typography>
-				<Card paperProps={{ elevation: 3 }}>
-					<Typography>{result.originalText}</Typography>
+
+			{result.originalText && (
+				<Card>
+					<Typography variant='h6'>Texto original</Typography>
+					<Card paperProps={{ elevation: 3 }}>
+						<Typography>{result.originalText}</Typography>
+					</Card>
 				</Card>
-			</Card>
+			)}
+
 			<Card
 				paperProps={{
 					sx: {

@@ -8,7 +8,7 @@ export default function Logo(props: LogoProps) {
 		<Box {...props}>
 			<Image
 				src='/static/images/logo/logo-main.png'
-				alt='udem logo'
+				alt='logo de la UDEM'
 				width={100}
 				height={50}
 			/>

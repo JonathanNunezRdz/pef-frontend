@@ -21,12 +21,31 @@ export interface PostAnalysisWithFileThunk {
 	document: File;
 }
 
+export interface SaveAnalysisWithFileThunk extends PostAnalysisWithFileThunk {
+	description?: string;
+}
+
 export interface PostAnalysisWithFileDto {
 	numOfSamples: number;
 	documentLoaded: boolean;
 }
 
-export interface PostAnalysisWithUrlDto {
-	numOfSamples: number;
+export interface SaveAnalysisWithFileDto extends PostAnalysisWithFileDto {
+	description?: string;
+}
+
+export class PostAnalysisWithUrlDto {
+	@IsString()
 	url: string;
+
+	@IsInt()
+	@Min(1)
+	@IsOptional()
+	numOfSamples?: number;
+}
+
+export class SaveAnalysisWithUrlDto extends PostAnalysisWithUrlDto {
+	@IsString()
+	@IsOptional()
+	description?: string;
 }

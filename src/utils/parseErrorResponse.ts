@@ -16,7 +16,7 @@ export function parseErrorResponse(
 							(prev, message) => `${prev} ${message}`,
 							''
 					  ),
-			code: 500,
+			code: parsedError.statusCode,
 		};
 	}
 	return {

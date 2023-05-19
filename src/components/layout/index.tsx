@@ -26,7 +26,7 @@ export default function Layout({ children }: LayoutProps) {
 	return (
 		<>
 			<Header />
-			<Container maxWidth='md' sx={{ my: '1rem' }}>
+			<Container maxWidth='md' sx={{ mt: 3, mb: 6 }}>
 				{children}
 			</Container>
 		</>

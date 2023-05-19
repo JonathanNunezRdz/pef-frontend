@@ -11,9 +11,13 @@ import ScoreExtras from './ScoreExtras';
 
 interface SimpleScoreProps {
 	algorithmScore: BaseAlgorithmScore;
+	fullWidth?: boolean;
 }
 
-export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
+export default function SimpleScore({
+	algorithmScore,
+	fullWidth = false,
+}: SimpleScoreProps) {
 	const { name, score, unit, max, min } = algorithmScore;
 	const [realValue, setRealValue] = useState(0);
 
@@ -48,7 +52,7 @@ export default function SimpleScore({ algorithmScore }: SimpleScoreProps) {
 	}, [score.value]);
 
 	return (
-		<GridV1 item xs={1}>
+		<GridV1 item xs={1} sm={fullWidth ? 2 : undefined}>
 			<Paper sx={{ p: '1rem' }} elevation={3}>
 				<Stack direction='column' spacing={1}>
 					<Box>

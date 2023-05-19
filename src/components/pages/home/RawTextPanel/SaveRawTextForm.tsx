@@ -44,9 +44,7 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<SaveAnalysisDto> = async (data) => {
-		// TODO: change isUninitialized to true
-		if (data.description === '') data.description = data.text.slice(0, 20);
+	const onSubmit: SubmitHandler<SaveAnalysisDto> = (data) => {
 		saveAnalysis(data);
 	};
 
@@ -71,9 +69,9 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 									onChange={field.onChange}
 									onBlur={field.onBlur}
 									inputProps={{
-										'aria-label': 'Titulo del análisis',
+										'aria-label': 'Título del análisis',
 									}}
-									label='Introduce un titulo para identificar este análisis'
+									label='Introduce un título para identificar este análisis'
 									error={Boolean(error)}
 									helperText={error?.message}
 									fullWidth

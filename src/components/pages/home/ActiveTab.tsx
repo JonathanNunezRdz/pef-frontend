@@ -1,8 +1,8 @@
 import Box from '@mui/material/Box';
 import TabPanel from '@/components/common/TabPanel';
-import RawTextTabPanel from './RawText/RawTextTabPanel';
-import UrlTabPanel from './UrlTabPanel';
-import FileTabPanel from './FileTabPanel';
+import RawTextTabPanel from './RawTextPanel/RawTextTabPanel';
+import UrlTabPanel from './UrlPanel/UrlTabPanel';
+import FileTabPanel from './FilePanel/FileTabPanel';
 
 interface ActiveTabProps {
 	currentTab: string;

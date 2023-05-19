@@ -1,5 +1,10 @@
-import { HttpError, PostAnalysisResponse, SaveAnalysisResponse } from '@/types';
-import { Draft, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import {
+	AnalysisErrorResponse,
+	PostAnalysisResponse,
+	SaveAnalysisResponse,
+} from '@/types';
+import { parseErrorResponse } from '@/utils';
+import { Draft, PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { analysisApi } from './analysisApi';
 
@@ -9,7 +14,7 @@ type AnalysisState = {
 	isSuccess: boolean;
 	isError: boolean;
 	data: SaveAnalysisResponse | PostAnalysisResponse | undefined;
-	error: HttpError | undefined;
+	error: AnalysisErrorResponse | undefined;
 };
 
 const initialState: AnalysisState = {
@@ -25,18 +30,7 @@ const analysis = createSlice({
 	name: 'analysis',
 	initialState,
 	reducers: {
-		analysisRejected: (
-			state,
-			action: PayloadAction<{ error: HttpError }>
-		) => {
-			state.data = undefined;
-			state.error = action.payload.error;
-			state.isError = true;
-			state.isLoading = false;
-			state.isSuccess = false;
-			state.isUninitialized = false;
-		},
-		resetAnalysis: () => {
+		resetAnalysisReducer: () => {
 			return initialState;
 		},
 	},
@@ -45,6 +39,12 @@ const analysis = createSlice({
 			.addMatcher((action) => {
 				return (
 					analysisApi.endpoints.saveAnalysis.matchPending(action) ||
+					analysisApi.endpoints.saveAnalysisWithFile.matchPending(
+						action
+					) ||
+					analysisApi.endpoints.saveAnalysisWithUrl.matchPending(
+						action
+					) ||
 					analysisApi.endpoints.addAnalysis.matchPending(action) ||
 					analysisApi.endpoints.addAnalysisWithFile.matchPending(
 						action
@@ -57,6 +57,12 @@ const analysis = createSlice({
 			.addMatcher((action) => {
 				return (
 					analysisApi.endpoints.saveAnalysis.matchFulfilled(action) ||
+					analysisApi.endpoints.saveAnalysisWithFile.matchFulfilled(
+						action
+					) ||
+					analysisApi.endpoints.saveAnalysisWithUrl.matchFulfilled(
+						action
+					) ||
 					analysisApi.endpoints.addAnalysis.matchFulfilled(action) ||
 					analysisApi.endpoints.addAnalysisWithFile.matchFulfilled(
 						action
@@ -65,7 +71,33 @@ const analysis = createSlice({
 						action
 					)
 				);
-			}, succeeded);
+			}, succeeded)
+			.addMatcher(
+				isAnyOf(
+					analysisApi.endpoints.saveAnalysis.matchRejected ||
+						analysisApi.endpoints.saveAnalysisWithFile
+							.matchRejected ||
+						analysisApi.endpoints.saveAnalysisWithUrl
+							.matchRejected ||
+						analysisApi.endpoints.addAnalysis.matchRejected,
+					analysisApi.endpoints.addAnalysisWithFile.matchRejected,
+					analysisApi.endpoints.addAnalysisWithUrl.matchRejected
+				),
+				(state, action) => {
+					let parsedError: AnalysisErrorResponse;
+					if (action.payload) {
+						parsedError = parseErrorResponse(action.payload);
+					} else {
+						parsedError = parseErrorResponse(action.error);
+					}
+					state.data = undefined;
+					state.error = parsedError;
+					state.isError = true;
+					state.isLoading = false;
+					state.isSuccess = false;
+					state.isUninitialized = false;
+				}
+			);
 	},
 });
 
@@ -90,7 +122,7 @@ const succeeded = (
 	state.isUninitialized = false;
 };
 
-export const { analysisRejected, resetAnalysis } = analysis.actions;
+export const { resetAnalysisReducer } = analysis.actions;
 
 export default analysis.reducer;
 

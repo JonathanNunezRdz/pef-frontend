@@ -1,6 +1,5 @@
 import { Transform } from 'class-transformer';
 import { IsInt, Max, Min } from 'class-validator';
-import { User } from '..';
 
 export class GetAnalysisDto {
 	@Transform(({ value }) => parseInt(value, 10))
@@ -13,8 +12,4 @@ export class GetAnalysisDto {
 	@Max(20)
 	@Min(1)
 	limit: number;
-}
-
-export interface GetAnalysisService extends GetAnalysisDto {
-	id: User['id'];
 }

@@ -18,6 +18,7 @@ import { selectAuth, signOut } from '@/store/auth/authReducer';
 
 import Link, { NextLinkComposed } from '../common/Link';
 import Logo from '../common/Logo';
+import { resetAllApis } from '@/store/api';
 
 export type Page = {
 	route: string;
@@ -203,7 +204,10 @@ export default function Header() {
 									borderRadius: '10px',
 									fontWeight: 'inherit',
 								}}
-								onClick={() => dispatch(signOut())}
+								onClick={() => {
+									dispatch(signOut());
+									dispatch(resetAllApis());
+								}}
 							>
 								Cerrar sesión
 							</Button>

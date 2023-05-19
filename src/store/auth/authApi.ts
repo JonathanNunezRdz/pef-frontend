@@ -1,29 +1,21 @@
 import { SignInDto, SignInResponse, SignUpDto, SignUpResponse } from '@/types';
-import { BASE_URL } from '@/utils';
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/dist/query/react';
+import { baseApi } from '../api';
 
-const authBaseUrl = `${BASE_URL}/api/auth`;
-
-export const authApi = createApi({
-	reducerPath: 'authApi',
-	baseQuery: fetchBaseQuery({
-		baseUrl: authBaseUrl,
-	}),
-	tagTypes: ['Auth'],
-	endpoints: (build) => ({
-		signIn: build.mutation<SignInResponse, SignInDto>({
+export const authApi = baseApi.injectEndpoints({
+	endpoints: (builder) => ({
+		signIn: builder.mutation<SignInResponse, SignInDto>({
 			query(body) {
 				return {
-					url: 'signin',
+					url: 'auth/signin',
 					body,
 					method: 'POST',
 				};
 			},
 		}),
-		signUp: build.mutation<SignUpResponse, SignUpDto>({
+		signUp: builder.mutation<SignUpResponse, SignUpDto>({
 			query(body) {
 				return {
-					url: 'signup',
+					url: 'auth/signup',
 					body,
 					method: 'POST',
 				};
@@ -31,5 +23,7 @@ export const authApi = createApi({
 		}),
 	}),
 });
+
+export const { resetApiState: resetAuthApi } = authApi.util;
 
 export const { useSignInMutation, useSignUpMutation } = authApi;

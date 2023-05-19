@@ -15,19 +15,19 @@ import {
 import { validateUrl } from '@/utils';
 import { useAddAnalysisWithUrlMutation } from '@/store/analysis';
 import { PostAnalysisWithUrlDto } from '@/types';
+import Card from '@/components/common/Card';
 
-interface UrlTabPanelProps {}
+interface PostUrlFormProps {}
 
-export default function UrlTabPanel({}: UrlTabPanelProps) {
+export default function PostUrlForm({}: PostUrlFormProps) {
 	// rtk hooks
-	const [postAnalysisWithUrl] = useAddAnalysisWithUrlMutation({
-		fixedCacheKey: 'url',
-	});
+	const [postAnalysisWithUrl] = useAddAnalysisWithUrlMutation();
+
 	// react-hook-form
 	const { control, handleSubmit } = useForm<PostAnalysisWithUrlDto>({
 		defaultValues: {
 			url: '',
-			numOfSamples: 10,
+			numOfSamples: 5,
 		},
 		resolver: (values) => {
 			const errors: FieldErrors<PostAnalysisWithUrlDto> = {};
@@ -89,11 +89,12 @@ export default function UrlTabPanel({}: UrlTabPanelProps) {
 							)}
 						/>
 					</Paper>
-					<Paper
-						sx={{
-							p: '1rem',
-							flexDirection: 'row-reverse',
-							display: 'flex',
+					<Card
+						paperProps={{
+							sx: {
+								flexDirection: 'row-reverse',
+								display: 'flex',
+							},
 						}}
 					>
 						<Button
@@ -103,7 +104,7 @@ export default function UrlTabPanel({}: UrlTabPanelProps) {
 						>
 							Analizar
 						</Button>
-					</Paper>
+					</Card>
 				</Stack>
 			</form>
 		</Box>
