@@ -13,13 +13,11 @@ export default function Info({}: InfoProps) {
 
 	if (isLoading || !isSuccess)
 		return (
-			<Stack direction='column' spacing={4}>
+			<Stack spacing={4}>
 				<Card
-					paperProps={{
-						sx: {
-							display: 'flex',
-							justifyContent: 'center',
-						},
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
 					}}
 				>
 					<CircularProgress />
@@ -28,8 +26,8 @@ export default function Info({}: InfoProps) {
 		);
 
 	return (
-		<Stack direction='column' spacing={4}>
-			<Box mt={1}>
+		<Stack spacing={4}>
+			<Box>
 				<Typography variant='h3'>¿Cómo funciona?</Typography>
 			</Box>
 

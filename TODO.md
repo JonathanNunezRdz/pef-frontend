@@ -11,6 +11,10 @@ Importantes:
 [] Paginacion
 [] Editar cuenta: nombre, apellido, contraseña
 
+[] Quitar color en la barra de crawford
+[] Usar las mismas barras en los resultados de analisis
+[] Agregar la opcion de mostrar minimos y maximos en la barra
+
 No tan importantes:
 
 [] Visualizar detalles de un resultado

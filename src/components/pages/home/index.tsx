@@ -27,7 +27,7 @@ export default function Home() {
 	};
 
 	return (
-		<Stack direction='column' spacing='1rem'>
+		<Stack spacing={2}>
 			{/* page title */}
 			<HomeTitle />
 
@@ -37,11 +37,9 @@ export default function Home() {
 			{/* loading component */}
 			{isLoading && (
 				<Card
-					paperProps={{
-						sx: {
-							display: 'flex',
-							justifyContent: 'center',
-						},
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
 					}}
 				>
 					<CircularProgress />

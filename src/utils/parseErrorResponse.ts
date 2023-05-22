@@ -6,6 +6,14 @@ export function parseErrorResponse(
 	error: FetchBaseQueryError | SerializedError
 ): AnalysisErrorResponse {
 	if ('status' in error) {
+		const { status } = error;
+		if (status === 'FETCH_ERROR') {
+			return {
+				message:
+					'Ha ocurrido un problema en la conexión, intenta más tarde',
+				code: 500,
+			};
+		}
 		const parsedError = error.data as HttpError;
 
 		return {
@@ -13,7 +21,7 @@ export function parseErrorResponse(
 				typeof parsedError.message === 'string'
 					? parsedError.message
 					: parsedError.message.reduce(
-							(prev, message) => `${prev} ${message}`,
+							(prev, message) => `${prev}${message}\n`,
 							''
 					  ),
 			code: parsedError.statusCode,

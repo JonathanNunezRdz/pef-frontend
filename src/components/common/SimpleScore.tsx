@@ -53,8 +53,8 @@ export default function SimpleScore({
 
 	return (
 		<GridV1 item xs={1} sm={fullWidth ? 2 : undefined}>
-			<Paper sx={{ p: '1rem' }} elevation={3}>
-				<Stack direction='column' spacing={1}>
+			<Paper sx={{ p: 2 }} elevation={3}>
+				<Stack spacing={1}>
 					<Box>
 						<Typography fontSize={20} fontWeight='bold'>
 							{name}

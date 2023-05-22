@@ -9,6 +9,7 @@ export const algorithmApi = baseApi.injectEndpoints({
 					url: 'algorithm',
 				};
 			},
+			providesTags: [{ type: 'Algorithm' }],
 		}),
 	}),
 });

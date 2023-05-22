@@ -26,7 +26,7 @@ export class SignUpDto {
 }
 
 export class SignUpFields extends SignUpDto {
-	@Match(SignUpFields, (f) => f.password, {
+	@Match(SignUpDto, (f) => f.password, {
 		message: 'Ambas contraseñas tienen que ser igual',
 	})
 	@IsString()

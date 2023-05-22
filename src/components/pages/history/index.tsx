@@ -3,17 +3,25 @@ import { useAppDispatch, useAppSelector } from '@/hooks';
 import { resetAnalysisApi, useGetAnalysisQuery } from '@/store/analysis';
 import { selectAuth } from '@/store/auth/authReducer';
 import {
+	Alert,
 	Box,
 	Button,
 	CircularProgress,
+	Pagination,
+	Snackbar,
 	Stack,
 	Typography,
 } from '@mui/material';
 import ReplayIcon from '@mui/icons-material/Replay';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-import { resetAnalysisReducer } from '@/store/analysis/analysisReducer';
+import { useEffect, useState } from 'react';
+import {
+	changePage,
+	resetAnalysisReducer,
+	selectAnalysisResults,
+} from '@/store/analysis/analysisReducer';
 import HistoryResult from './HistoryResult';
+import Notification from '@/components/common/Notification';
 
 export default function Historial() {
 	// nextjs hooks
@@ -22,6 +30,7 @@ export default function Historial() {
 	// rtk hooks
 	const dispatch = useAppDispatch();
 	const { isLoggedIn, checkedToken } = useAppSelector(selectAuth);
+	const { pageSize, currentPage } = useAppSelector(selectAnalysisResults);
 
 	const {
 		data: analysis,
@@ -31,13 +40,22 @@ export default function Historial() {
 		refetch,
 	} = useGetAnalysisQuery(
 		{
-			limit: 9,
-			page: 1,
+			limit: pageSize,
+			page: currentPage,
 		},
 		{
 			skip: !isLoggedIn,
 		}
 	);
+
+	// react hooks
+	const [showDeleteSucess, setShowDeleteSuccess] = useState(false);
+
+	// functions
+	const handleChangePage = (_: unknown, page: number) => {
+		dispatch(changePage(page));
+	};
+	const handleClose = () => setShowDeleteSuccess(false);
 
 	// effects
 	useEffect(() => {
@@ -57,8 +75,8 @@ export default function Historial() {
 
 	// render
 	return (
-		<Stack direction='column' spacing={4}>
-			<Box mt={1}>
+		<Stack spacing={4}>
+			<Box>
 				<Box>
 					<Typography variant='h3'>
 						Historial de resultados
@@ -84,13 +102,23 @@ export default function Historial() {
 				Volver a cargar
 			</Button>
 
+			<Box display='flex' justifyContent='center'>
+				<Pagination
+					count={
+						isSuccess
+							? Math.ceil(analysis.totalAnalysis / pageSize)
+							: 0
+					}
+					page={currentPage}
+					onChange={handleChangePage}
+				/>
+			</Box>
+
 			{(isLoading || isFetching) && (
 				<Card
-					paperProps={{
-						sx: {
-							display: 'flex',
-							justifyContent: 'center',
-						},
+					sx={{
+						display: 'flex',
+						justifyContent: 'center',
 					}}
 				>
 					<CircularProgress />
@@ -100,7 +128,11 @@ export default function Historial() {
 			{isSuccess &&
 				analysis.data.length > 0 &&
 				analysis.data.map((result) => (
-					<HistoryResult key={result.id} result={result} />
+					<HistoryResult
+						key={result.id}
+						result={result}
+						onDelete={() => setShowDeleteSuccess(true)}
+					/>
 				))}
 
 			{isSuccess && analysis.data.length === 0 && (
@@ -108,6 +140,26 @@ export default function Historial() {
 					<Typography>No has realizado ningún análisis.</Typography>
 				</Card>
 			)}
+
+			<Box display='flex' justifyContent='center'>
+				<Pagination
+					count={
+						isSuccess
+							? Math.ceil(analysis.totalAnalysis / pageSize)
+							: 0
+					}
+					page={currentPage}
+					onChange={handleChangePage}
+				/>
+			</Box>
+
+			<Notification
+				type='success'
+				open={showDeleteSucess}
+				onClose={handleClose}
+				autoHideDuration={6000}
+				message='Se ha eliminado el resultado exitosamente'
+			/>
 		</Stack>
 	);
 }

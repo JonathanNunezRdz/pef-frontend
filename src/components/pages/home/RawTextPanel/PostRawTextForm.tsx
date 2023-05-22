@@ -52,16 +52,14 @@ export default function PostRawTextForm({}: PostRawTextFormProps) {
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack direction='column' spacing='1rem'>
-					<Paper sx={{ p: '1rem' }}>
+				<Stack spacing={2}>
+					<Paper sx={{ p: 2 }}>
 						<RawTextField control={control} from='post' />
 					</Paper>
 					<Card
-						paperProps={{
-							sx: {
-								flexDirection: 'row-reverse',
-								display: 'flex',
-							},
+						sx={{
+							flexDirection: 'row-reverse',
+							display: 'flex',
 						}}
 					>
 						<Button

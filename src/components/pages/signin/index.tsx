@@ -68,10 +68,10 @@ export default function SignIn({}: SignInProps) {
 	}, [dispatch, signInResult.isSuccess, signInResult.data]);
 
 	return (
-		<Stack direction='column' spacing={4}>
+		<Stack spacing={4}>
 			{/* start title */}
 			<Box>
-				<Box display='flex' alignItems='end' gap={4}>
+				<Box>
 					<Typography variant='h3'>Iniciar Sesión</Typography>
 				</Box>
 			</Box>
@@ -82,7 +82,7 @@ export default function SignIn({}: SignInProps) {
 				<Paper sx={{ p: 4 }}>
 					{/* CHANGE_PENDING -> add error and loading states */}
 					<form onSubmit={handleSubmit(onSubmit)} noValidate>
-						<Stack direction='column' spacing={4}>
+						<Stack spacing={4}>
 							<TextField
 								{...register('email')}
 								label='Correo electrónico'

@@ -16,6 +16,7 @@ import { validateUrl } from '@/utils';
 import { useAddAnalysisWithUrlMutation } from '@/store/analysis';
 import { PostAnalysisWithUrlDto } from '@/types';
 import Card from '@/components/common/Card';
+import { Typography } from '@mui/material';
 
 interface PostUrlFormProps {}
 
@@ -62,8 +63,14 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack direction='column' spacing='1rem'>
-					<Paper sx={{ p: '1rem' }}>
+				<Stack spacing={2}>
+					<Paper sx={{ p: 2 }}>
+						<Box mb={2}>
+							<Typography>
+								*Recuerda que esta herramienta solo realiza
+								análisis en sitios en español.
+							</Typography>
+						</Box>
 						<Controller
 							control={control}
 							name='url'
@@ -90,11 +97,9 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 						/>
 					</Paper>
 					<Card
-						paperProps={{
-							sx: {
-								flexDirection: 'row-reverse',
-								display: 'flex',
-							},
+						sx={{
+							flexDirection: 'row-reverse',
+							display: 'flex',
 						}}
 					>
 						<Button

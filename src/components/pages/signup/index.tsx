@@ -21,6 +21,7 @@ import { SignUpFields } from '@/types';
 import { parseErrorResponse } from '@/utils';
 import { useAppDispatch, useAppSelector } from '@/hooks';
 import { selectAuth, setCredentials } from '@/store/auth/authReducer';
+import { Alert, Snackbar } from '@mui/material';
 
 interface SignUpProps {}
 
@@ -35,6 +36,8 @@ export default function SignUp({}: SignUpProps) {
 
 	// react hooks
 	const [showPassword, setShowPassword] = useState(false);
+	const [showError, setShowError] = useState(false);
+	const [manualClosed, setManualClosed] = useState(false);
 
 	// react-hook-form
 	const {
@@ -59,6 +62,10 @@ export default function SignUp({}: SignUpProps) {
 		} catch (error) {}
 	};
 	const handleToggleShowPassword = () => setShowPassword((show) => !show);
+	const handleClose = () => {
+		setShowError(false);
+		setManualClosed(true);
+	};
 
 	// effects
 	useEffect(() => {
@@ -67,8 +74,17 @@ export default function SignUp({}: SignUpProps) {
 		}
 	}, [isLoggedIn, router]);
 
+	useEffect(() => {
+		if (signUpResult.isError && !showError && !manualClosed) {
+			setShowError(true);
+		} else if (!signUpResult.isError) {
+			setShowError(false);
+			setManualClosed(false);
+		}
+	}, [signUpResult.isError, manualClosed, showError]);
+
 	return (
-		<Stack direction='column' spacing={4}>
+		<Stack spacing={4}>
 			{/* start title */}
 			<Box>
 				<Box display='flex' alignItems='end' gap={4}>
@@ -82,7 +98,7 @@ export default function SignUp({}: SignUpProps) {
 				<Paper sx={{ p: 4 }}>
 					{/* CHANGE_PENDING -> add error and loading states */}
 					<form onSubmit={handleSubmit(onSubmit)} noValidate>
-						<Stack direction='column' spacing={4}>
+						<Stack spacing={4}>
 							<TextField
 								{...register('firstName')}
 								label='Nombre'
@@ -213,19 +229,24 @@ export default function SignUp({}: SignUpProps) {
 							/>
 
 							{/* style error message correctly */}
-							{signUpResult.isError && (
-								<FormHelperText
-									error={signUpResult.isError}
-									sx={{
-										fontSize: 20,
-									}}
+							<Snackbar
+								open={showError}
+								onClose={handleClose}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'center',
+								}}
+							>
+								<Alert
+									onClose={handleClose}
+									severity='error'
+									sx={{ width: '100%' }}
 								>
-									{
+									{signUpResult.isError &&
 										parseErrorResponse(signUpResult.error)
-											.message
-									}
-								</FormHelperText>
-							)}
+											.message}
+								</Alert>
+							</Snackbar>
 
 							<Button
 								type='submit'

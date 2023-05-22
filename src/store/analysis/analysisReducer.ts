@@ -15,6 +15,10 @@ type AnalysisState = {
 	isError: boolean;
 	data: SaveAnalysisResponse | PostAnalysisResponse | undefined;
 	error: AnalysisErrorResponse | undefined;
+	results: {
+		pageSize: number;
+		currentPage: number;
+	};
 };
 
 const initialState: AnalysisState = {
@@ -24,6 +28,10 @@ const initialState: AnalysisState = {
 	isError: false,
 	data: undefined,
 	error: undefined,
+	results: {
+		pageSize: 2,
+		currentPage: 1,
+	},
 };
 
 const analysis = createSlice({
@@ -32,6 +40,9 @@ const analysis = createSlice({
 	reducers: {
 		resetAnalysisReducer: () => {
 			return initialState;
+		},
+		changePage: (state, action: PayloadAction<number>) => {
+			state.results.currentPage = action.payload;
 		},
 	},
 	extraReducers(builder) {
@@ -122,8 +133,10 @@ const succeeded = (
 	state.isUninitialized = false;
 };
 
-export const { resetAnalysisReducer } = analysis.actions;
+export const { resetAnalysisReducer, changePage } = analysis.actions;
 
 export default analysis.reducer;
 
 export const selectAnalysisStatus = (state: RootState) => state.analysis;
+export const selectAnalysisResults = (state: RootState) =>
+	state.analysis.results;

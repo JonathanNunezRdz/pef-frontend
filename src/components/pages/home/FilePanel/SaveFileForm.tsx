@@ -75,8 +75,20 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack direction='column' spacing='1rem'>
-					<Paper sx={{ p: '1rem' }}>
+				<Stack spacing={2}>
+					<Paper sx={{ p: 2 }}>
+						<Box>
+							<Typography component='div'>
+								Formatos aceptados:
+								<ul style={{ marginTop: 0 }}>
+									<li>Archivo PDF (.pdf)</li>
+									<li>
+										Archivo Microsoft Word (.doc o .docx)
+									</li>
+									<li>Archivo de texto (.txt)</li>
+								</ul>
+							</Typography>
+						</Box>
 						<Button
 							variant='contained'
 							color='secondary'
@@ -97,7 +109,7 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 						</FormHelperText>
 					</Paper>
 					{watch('documentLoaded') && document && (
-						<Paper sx={{ p: '1rem' }}>
+						<Paper sx={{ p: 2 }}>
 							<Typography variant='h6'>
 								Documento elegido
 							</Typography>
@@ -114,7 +126,7 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 						</Paper>
 					)}
 
-					<Paper sx={{ p: '1rem' }}>
+					<Paper sx={{ p: 2 }}>
 						<Controller
 							control={control}
 							name='description'
@@ -137,11 +149,9 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 					</Paper>
 
 					<Card
-						paperProps={{
-							sx: {
-								flexDirection: 'row-reverse',
-								display: 'flex',
-							},
+						sx={{
+							flexDirection: 'row-reverse',
+							display: 'flex',
 						}}
 					>
 						<Button

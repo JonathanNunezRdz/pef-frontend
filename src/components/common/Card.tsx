@@ -1,18 +1,14 @@
 import Paper, { PaperProps } from '@mui/material/Paper';
-import { ReactNode } from 'react';
 
-interface CardProps {
-	children: ReactNode;
-	paperProps?: PaperProps;
-}
+interface CardProps extends PaperProps {}
 
-export default function Card({ children, paperProps }: CardProps) {
+export default function Card({ children, sx, ...rest }: CardProps) {
 	const sxProps: PaperProps['sx'] = {
-		p: '1rem',
-		...paperProps?.sx,
+		p: 2,
+		...sx,
 	};
 	return (
-		<Paper {...paperProps} sx={sxProps}>
+		<Paper {...rest} sx={sxProps}>
 			{children}
 		</Paper>
 	);

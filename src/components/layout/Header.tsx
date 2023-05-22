@@ -67,7 +67,7 @@ export default function Header() {
 			enableColorOnDark
 			sx={{ borderRadius: '10px' }}
 		>
-			<Box px='1rem'>
+			<Box px={2}>
 				<Toolbar disableGutters>
 					{/* left side logo only on desktop*/}
 					<Box sx={{ flexGrow: showOnMobile ? 1 : 0 }}>

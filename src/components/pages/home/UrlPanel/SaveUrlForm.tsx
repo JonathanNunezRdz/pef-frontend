@@ -61,8 +61,8 @@ export default function SaveUrlForm({}: SaveUrlFormProps) {
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack direction='column' spacing='1rem'>
-					<Paper sx={{ p: '1rem' }}>
+				<Stack spacing={2}>
+					<Paper sx={{ p: 2 }}>
 						<Controller
 							control={control}
 							name='url'
@@ -88,7 +88,7 @@ export default function SaveUrlForm({}: SaveUrlFormProps) {
 							)}
 						/>
 					</Paper>
-					<Paper sx={{ p: '1rem' }}>
+					<Paper sx={{ p: 2 }}>
 						<Controller
 							control={control}
 							name='description'
@@ -110,11 +110,9 @@ export default function SaveUrlForm({}: SaveUrlFormProps) {
 						/>
 					</Paper>
 					<Card
-						paperProps={{
-							sx: {
-								flexDirection: 'row-reverse',
-								display: 'flex',
-							},
+						sx={{
+							flexDirection: 'row-reverse',
+							display: 'flex',
 						}}
 					>
 						<Button

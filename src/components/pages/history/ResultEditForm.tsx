@@ -60,6 +60,7 @@ export default function ResultEditForm({
 								sx={{
 									height: '50px',
 								}}
+								autoFocus={true}
 							/>
 						)}
 					/>

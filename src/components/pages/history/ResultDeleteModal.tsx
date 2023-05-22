@@ -6,6 +6,7 @@ interface ResultDeleteModalProps {
 	handleClose: () => void;
 	resultId: string;
 	title: string;
+	onDelete?: () => void;
 }
 
 export default function ResultDeleteModal({
@@ -13,12 +14,14 @@ export default function ResultDeleteModal({
 	handleClose,
 	resultId,
 	title,
+	onDelete,
 }: ResultDeleteModalProps) {
 	// rtk hooks
 	const [deleteResult] = useDeleteResultMutation();
 
 	const handleDelete = () => {
 		deleteResult({ resultId });
+		if (onDelete) onDelete();
 	};
 
 	return (
@@ -50,11 +53,11 @@ export default function ResultDeleteModal({
 					id={`Eliminar resultado con nombre ${title}`}
 					mt={2}
 				>
-					¿Estás seguro de que quieres eliminar el resultado:{' '}
+					¿Estás seguro de que quieres eliminar el resultado: &quot;
 					<Typography fontStyle='italic' component='span'>
 						{title}
 					</Typography>{' '}
-					?
+					&quot; ?
 				</Typography>
 				<Box display='flex' mt={2} gap={2}>
 					<Button variant='contained' onClick={handleClose}>

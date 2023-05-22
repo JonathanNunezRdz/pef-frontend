@@ -24,11 +24,9 @@ export default function ShowAnalysisResult({
 			</Card>
 
 			<Card
-				paperProps={{
-					sx: {
-						flexDirection: 'row-reverse',
-						display: 'flex',
-					},
+				sx={{
+					flexDirection: 'row-reverse',
+					display: 'flex',
 				}}
 			>
 				<Button
@@ -40,7 +38,7 @@ export default function ShowAnalysisResult({
 				</Button>
 			</Card>
 
-			<Card>
+			{/* <Card>
 				<Typography variant='h6'>Estadísticos</Typography>
 				{result.metrics.map((metric) => (
 					<Box key={metric.name}>
@@ -49,18 +47,18 @@ export default function ShowAnalysisResult({
 						</Typography>
 					</Box>
 				))}
-			</Card>
+			</Card> */}
 
 			{result.originalText && (
 				<Card>
 					<Typography variant='h6'>Texto original</Typography>
-					<Card paperProps={{ elevation: 3 }}>
+					<Card elevation={3}>
 						<Typography>{result.originalText}</Typography>
 					</Card>
 				</Card>
 			)}
 
-			<Card
+			{/* <Card
 				paperProps={{
 					sx: {
 						flexDirection: 'row-reverse',
@@ -75,7 +73,7 @@ export default function ShowAnalysisResult({
 				>
 					Hacer otro análisis
 				</Button>
-			</Card>
+			</Card> */}
 		</Fragment>
 	);
 }

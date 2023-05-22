@@ -7,7 +7,7 @@ interface HomeTitleProps {}
 export default function HomeTitle({}: HomeTitleProps) {
 	return (
 		<Box>
-			<Box display='flex' alignItems='end' gap='1rem'>
+			<Box display='flex' alignItems='end' gap={2}>
 				<Box>
 					<Image
 						src='/static/images/logo/logo_white.png'

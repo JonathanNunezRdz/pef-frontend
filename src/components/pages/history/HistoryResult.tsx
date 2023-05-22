@@ -2,7 +2,15 @@ import Card from '@/components/common/Card';
 import CustomScoreBar from '@/components/common/CustomScoreBar';
 import { GetAnalysisResponse } from '@/types';
 import { MONTH_LABELS, getPoints } from '@/utils';
-import { Box, Grid, IconButton, Stack, Typography } from '@mui/material';
+import {
+	Alert,
+	Box,
+	Grid,
+	IconButton,
+	Snackbar,
+	Stack,
+	Typography,
+} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ResultScore from './ResultScore';
@@ -12,24 +20,33 @@ import ResultDeleteModal from './ResultDeleteModal';
 
 interface HistoryResultProps {
 	result: GetAnalysisResponse['data'][0];
+	onDelete?: () => void;
 }
 
-export default function HistoryResult({ result }: HistoryResultProps) {
+export default function HistoryResult({
+	result,
+	onDelete,
+}: HistoryResultProps) {
 	// react hooks
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [isDeleteMode, setIsDeleteMode] = useState(false);
+	const [showSuccess, setShowSuccess] = useState(false);
+
+	// functions
+	const handleClose = () => setShowSuccess(false);
 
 	const { scores } = result;
 	const [udemScore, ...rest] = scores;
 
 	return (
 		<Card>
-			<Stack direction='column' spacing={2}>
+			<Stack spacing={2}>
 				<ResultDeleteModal
 					isOpen={isDeleteMode}
 					handleClose={() => setIsDeleteMode(false)}
 					resultId={result.id}
 					title={result.description}
+					onDelete={onDelete}
 				/>
 				<Box
 					display='flex'
@@ -42,7 +59,10 @@ export default function HistoryResult({ result }: HistoryResultProps) {
 							<ResultEditForm
 								resultId={result.id}
 								originalDescription={result.description}
-								onSuccess={() => setIsEditMode(false)}
+								onSuccess={() => {
+									setIsEditMode(false);
+									setShowSuccess(true);
+								}}
 							/>
 						) : (
 							<Typography variant='h5'>
@@ -105,6 +125,20 @@ export default function HistoryResult({ result }: HistoryResultProps) {
 						))}
 					</Grid>
 				</Box>
+				<Snackbar
+					open={showSuccess}
+					onClose={handleClose}
+					autoHideDuration={6000}
+					anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+				>
+					<Alert
+						onClose={handleClose}
+						severity='success'
+						sx={{ width: '100%' }}
+					>
+						Se ha editado el título exitosamente
+					</Alert>
+				</Snackbar>
 			</Stack>
 		</Card>
 	);

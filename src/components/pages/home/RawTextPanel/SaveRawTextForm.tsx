@@ -54,11 +54,11 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 	return (
 		<Box>
 			<form onSubmit={handleSubmit(onSubmit)}>
-				<Stack direction='column' spacing='1rem'>
-					<Paper sx={{ p: '1rem' }}>
+				<Stack spacing={2}>
+					<Paper sx={{ p: 2 }}>
 						<RawTextField control={control} from='save' />
 					</Paper>
-					<Paper sx={{ p: '1rem' }}>
+					<Paper sx={{ p: 2 }}>
 						<Controller
 							control={control}
 							name='description'
@@ -80,11 +80,9 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 						/>
 					</Paper>
 					<Card
-						paperProps={{
-							sx: {
-								flexDirection: 'row-reverse',
-								display: 'flex',
-							},
+						sx={{
+							flexDirection: 'row-reverse',
+							display: 'flex',
 						}}
 					>
 						<Button

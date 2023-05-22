@@ -23,11 +23,9 @@ export default function AnalysisError({
 				<Typography>{error.code}</Typography>
 			</Card>
 			<Card
-				paperProps={{
-					sx: {
-						flexDirection: 'row-reverse',
-						display: 'flex',
-					},
+				sx={{
+					flexDirection: 'row-reverse',
+					display: 'flex',
 				}}
 			>
 				<Button
