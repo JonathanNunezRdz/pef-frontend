@@ -20,7 +20,10 @@ export default function ShowAnalysisResult({
 			</Card>
 
 			<Card>
-				<AlgorithmScores scores={result.scores} />
+				<AlgorithmScores
+					scores={result.scores}
+					buttonCallback={handleResetAnalysis}
+				/>
 			</Card>
 
 			<Card
@@ -38,7 +41,7 @@ export default function ShowAnalysisResult({
 				</Button>
 			</Card>
 
-			{/* <Card>
+			<Card>
 				<Typography variant='h6'>Estadísticos</Typography>
 				{result.metrics.map((metric) => (
 					<Box key={metric.name}>
@@ -47,7 +50,7 @@ export default function ShowAnalysisResult({
 						</Typography>
 					</Box>
 				))}
-			</Card> */}
+			</Card>
 
 			{result.originalText && (
 				<Card>

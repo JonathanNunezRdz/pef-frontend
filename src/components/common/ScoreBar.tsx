@@ -17,15 +17,14 @@ interface ScoreBarProps extends LinearProgressProps {
 
 export default function ScoreBar(props: ScoreBarProps) {
 	const { value, displayValue, ...rest } = props;
-	const realValue = Math.min(value, 100);
 
 	return (
 		<Box sx={{ display: 'flex', alignItems: 'center' }}>
 			<Box sx={{ width: '100%', mr: displayValue ? 1 : undefined }}>
 				<LinearProgress
 					variant='determinate'
-					color={getColor(realValue)}
-					value={realValue}
+					color={getColor(value)}
+					value={value}
 					{...rest}
 				/>
 			</Box>
@@ -34,7 +33,7 @@ export default function ScoreBar(props: ScoreBarProps) {
 					<Typography
 						variant='body2'
 						color='text.secondary'
-					>{`${Math.round(realValue)}%`}</Typography>
+					>{`${Math.round(value)}%`}</Typography>
 				</Box>
 			)}
 		</Box>

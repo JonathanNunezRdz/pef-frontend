@@ -5,6 +5,8 @@ import { MONTH_LABELS, getPoints } from '@/utils';
 import {
 	Alert,
 	Box,
+	Button,
+	Collapse,
 	Grid,
 	IconButton,
 	Snackbar,
@@ -31,6 +33,7 @@ export default function HistoryResult({
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [isDeleteMode, setIsDeleteMode] = useState(false);
 	const [showSuccess, setShowSuccess] = useState(false);
+	const [showAll, setShowAll] = useState(false);
 
 	// functions
 	const handleClose = () => setShowSuccess(false);
@@ -38,9 +41,11 @@ export default function HistoryResult({
 	const { scores } = result;
 	const [udemScore, ...rest] = scores;
 
+	const createdAt = new Date(result.createdAt);
+
 	return (
 		<Card>
-			<Stack spacing={2}>
+			<Stack spacing={1}>
 				<ResultDeleteModal
 					isOpen={isDeleteMode}
 					handleClose={() => setIsDeleteMode(false)}
@@ -75,14 +80,10 @@ export default function HistoryResult({
 							fontStyle='italic'
 							color={(theme) => theme.palette.grey['400']}
 						>
-							Análisis realizado el{' '}
-							{new Date(result.createdAt).getDate()} de{' '}
-							{
-								MONTH_LABELS[
-									new Date(result.createdAt).getMonth()
-								]
-							}{' '}
-							del {new Date(result.createdAt).getFullYear()}
+							Análisis realizado el {createdAt.getDate()} de{' '}
+							{MONTH_LABELS[createdAt.getMonth()]} del{' '}
+							{createdAt.getFullYear()} a las{' '}
+							{createdAt.getHours()}:{createdAt.getMinutes()}
 						</Typography>
 					</Box>
 					<Box display='flex' gap={1}>
@@ -110,20 +111,31 @@ export default function HistoryResult({
 						</IconButton>
 					</Box>
 				</Box>
-				<Box>
-					<Typography variant='h6'>Calificaciones</Typography>
-					<Grid
-						container
-						columns={{ xs: 1, md: 2 }}
-						rowSpacing={0}
-						columnSpacing={2}
-					>
-						<ResultScore score={udemScore} fullWidth />
 
-						{rest.map((score) => (
-							<ResultScore key={score.id} score={score} />
-						))}
-					</Grid>
+				<Box>
+					<Typography variant='h6'>Calificación</Typography>
+					<Box mb={1}>
+						<ResultScore score={udemScore} />
+					</Box>
+					<Collapse in={showAll}>
+						<Grid container columns={{ xs: 1, md: 2 }} spacing={1}>
+							{rest.map((score) => (
+								<Grid item xs={1} key={score.id}>
+									<ResultScore score={score} />
+								</Grid>
+							))}
+						</Grid>
+					</Collapse>
+				</Box>
+				<Box>
+					<Button
+						onClick={() => setShowAll((show) => !show)}
+						color='secondary'
+					>
+						{showAll
+							? 'Mostrar menos calificaciones'
+							: 'Mostrar más calificaciones'}
+					</Button>
 				</Box>
 				<Snackbar
 					open={showSuccess}

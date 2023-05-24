@@ -75,7 +75,7 @@ export default function SimpleScore({
 							<ScoreBar
 								value={realValue}
 								sx={{
-									height: '15px',
+									height: '25px',
 									borderRadius: '10px',
 								}}
 							/>
