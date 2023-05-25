@@ -3,7 +3,6 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useSaveAnalysisWithFileMutation } from '@/store/analysis';
@@ -122,9 +121,6 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 								onChange={handleDocumentChange}
 							/>
 						</Button>
-						<FormHelperText>
-							Tip: Puedes arrastrar el documento al botón
-						</FormHelperText>
 					</Paper>
 					{watch('documentLoaded') && document && (
 						<Paper sx={{ p: 2 }}>
@@ -161,9 +157,9 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 							}}
 							fullWidth
 						/>
-						<Typography mt={1}>
+						<Typography mt={1} fontSize={16}>
 							Este número se utiliza para el Algoritmo de
-							Fernández Huerta, recomendamos que suba en
+							Fernández Huerta, recomendamos que se incremente en
 							proporción al tamaño del texto.
 						</Typography>
 					</Paper>

@@ -17,11 +17,14 @@ import { useAddAnalysisWithUrlMutation } from '@/store/analysis';
 import { PostAnalysisWithUrlDto } from '@/types';
 import Card from '@/components/common/Card';
 import { Typography } from '@mui/material';
+import { useAppDispatch } from '@/hooks';
+import { setOriginalArgs } from '@/store/analysis/analysisReducer';
 
 interface PostUrlFormProps {}
 
 export default function PostUrlForm({}: PostUrlFormProps) {
 	// rtk hooks
+	const dispatch = useAppDispatch();
 	const [postAnalysisWithUrl] = useAddAnalysisWithUrlMutation();
 
 	// react-hook-form
@@ -70,8 +73,11 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<PostAnalysisWithUrlDto> = (data) => {
-		postAnalysisWithUrl(data);
+	const onSubmit: SubmitHandler<PostAnalysisWithUrlDto> = async (data) => {
+		try {
+			await postAnalysisWithUrl(data);
+			dispatch(setOriginalArgs({ from: 'url', source: data.url }));
+		} catch (error) {}
 	};
 
 	// effects
@@ -131,9 +137,9 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 							}}
 							fullWidth
 						/>
-						<Typography mt={1}>
+						<Typography mt={1} fontSize={16}>
 							Este número se utiliza para el Algoritmo de
-							Fernández Huerta, recomendamos que suba en
+							Fernández Huerta, recomendamos que se incremente en
 							proporción al tamaño del texto.
 						</Typography>
 					</Paper>

@@ -57,31 +57,6 @@ export default function InterpretationTable({
 							</TableRow>
 						);
 					})}
-					{/* <TableRow>
-						<TableCell>0 a 30</TableCell>
-						<TableCell>Muy difícil</TableCell>
-						<TableCell>Universitario (especialización)</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell>31 a 50</TableCell>
-						<TableCell>Difícil</TableCell>
-						<TableCell>Cursos selectivos</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell>51 a 60</TableCell>
-						<TableCell>Moderadamente difícil</TableCell>
-						<TableCell>Preuniversitario</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell>61 a 70</TableCell>
-						<TableCell>Normal</TableCell>
-						<TableCell>7° u 8° grado</TableCell>
-					</TableRow>
-					<TableRow>
-						<TableCell>71 a 80</TableCell>
-						<TableCell>Normal</TableCell>
-						<TableCell>7° u 8° grado</TableCell>
-					</TableRow> */}
 				</TableBody>
 			</Table>
 		</TableContainer>

@@ -8,6 +8,16 @@ import { Draft, PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit';
 import { RootState } from '..';
 import { analysisApi } from './analysisApi';
 
+type FileOriginalArgs = {
+	from: 'file';
+	document: File;
+};
+
+type UrlOriginalArgs = {
+	from: 'url';
+	source: string;
+};
+
 type AnalysisState = {
 	isUninitialized: boolean;
 	isLoading: boolean;
@@ -19,6 +29,7 @@ type AnalysisState = {
 		pageSize: number;
 		currentPage: number;
 	};
+	originalArgs?: FileOriginalArgs | UrlOriginalArgs;
 };
 
 const initialState: AnalysisState = {
@@ -43,6 +54,12 @@ const analysis = createSlice({
 		},
 		changePage: (state, action: PayloadAction<number>) => {
 			state.results.currentPage = action.payload;
+		},
+		setOriginalArgs: (
+			state,
+			action: PayloadAction<Required<AnalysisState>['originalArgs']>
+		) => {
+			state.originalArgs = action.payload;
 		},
 	},
 	extraReducers(builder) {
@@ -133,10 +150,13 @@ const succeeded = (
 	state.isUninitialized = false;
 };
 
-export const { resetAnalysisReducer, changePage } = analysis.actions;
+export const { resetAnalysisReducer, changePage, setOriginalArgs } =
+	analysis.actions;
 
 export default analysis.reducer;
 
 export const selectAnalysisStatus = (state: RootState) => state.analysis;
 export const selectAnalysisResults = (state: RootState) =>
 	state.analysis.results;
+export const selectAnalysisArgs = (state: RootState) =>
+	state.analysis.originalArgs;

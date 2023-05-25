@@ -92,9 +92,9 @@ export default function PostRawTextForm({}: PostRawTextFormProps) {
 							}}
 							fullWidth
 						/>
-						<Typography mt={1}>
+						<Typography mt={1} fontSize={16}>
 							Este número se utiliza para el Algoritmo de
-							Fernández Huerta, recomendamos que suba en
+							Fernández Huerta, recomendamos que se incremente en
 							proporción al tamaño del texto.
 						</Typography>
 					</Paper>

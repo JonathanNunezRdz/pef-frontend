@@ -2,7 +2,6 @@ import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import FormHelperText from '@mui/material/FormHelperText';
 import Typography from '@mui/material/Typography';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import { useAddAnalysisWithFileMutation } from '@/store/analysis';
@@ -17,11 +16,14 @@ import {
 } from 'react-hook-form';
 import Card from '@/components/common/Card';
 import { TextField } from '@mui/material';
+import { useAppDispatch } from '@/hooks';
+import { setOriginalArgs } from '@/store/analysis/analysisReducer';
 
 interface PostFileFormProps {}
 
 export default function PostFileForm({}: PostFileFormProps) {
 	// rtk hooks
+	const dispatch = useAppDispatch();
 	const [postAnalysisWithFile] = useAddAnalysisWithFileMutation();
 
 	// react hooks
@@ -68,9 +70,15 @@ export default function PostFileForm({}: PostFileFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<PostAnalysisWithFileDto> = (data) => {
+	const onSubmit: SubmitHandler<PostAnalysisWithFileDto> = async (data) => {
 		if (!document) return;
-		postAnalysisWithFile({ document, numOfSamples: data.numOfSamples });
+		try {
+			await postAnalysisWithFile({
+				document,
+				numOfSamples: data.numOfSamples,
+			});
+			dispatch(setOriginalArgs({ from: 'file', document }));
+		} catch (error) {}
 	};
 	const handleDocumentChange = async (
 		event: ChangeEvent<HTMLInputElement>
@@ -115,9 +123,6 @@ export default function PostFileForm({}: PostFileFormProps) {
 								onChange={handleDocumentChange}
 							/>
 						</Button>
-						<FormHelperText>
-							Tip: Puedes arrastrar el documento al botón
-						</FormHelperText>
 					</Paper>
 					{watch('documentLoaded') && document && (
 						<Paper sx={{ p: 2 }}>
@@ -154,9 +159,9 @@ export default function PostFileForm({}: PostFileFormProps) {
 							}}
 							fullWidth
 						/>
-						<Typography mt={1}>
+						<Typography mt={1} fontSize={16}>
 							Este número se utiliza para el Algoritmo de
-							Fernández Huerta, recomendamos que suba en
+							Fernández Huerta, recomendamos que se incremente en
 							proporción al tamaño del texto.
 						</Typography>
 					</Paper>

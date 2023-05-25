@@ -5,15 +5,16 @@ import Image from 'next/image';
 interface HomeTitleProps {}
 
 export default function HomeTitle({}: HomeTitleProps) {
+	const height = 100;
 	return (
 		<Box>
 			<Box display='flex' alignItems='end' gap={2}>
 				<Box>
 					<Image
-						src='/static/images/logo/logo_white.png'
+						src='/static/images/logo/logo.png'
 						alt='logo de la aplicación'
-						width={100}
-						height={55}
+						width={height * 1.65}
+						height={height}
 					/>
 				</Box>
 				<Typography
