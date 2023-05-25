@@ -17,11 +17,14 @@ import {
 	useForm,
 } from 'react-hook-form';
 import { Typography } from '@mui/material';
+import { useAppDispatch } from '@/hooks';
+import { setOriginalArgs } from '@/store/analysis/analysisReducer';
 
 interface SaveUrlFormProps {}
 
 export default function SaveUrlForm({}: SaveUrlFormProps) {
 	// rtk hooks
+	const dispatch = useAppDispatch();
 	const [saveAnalysis] = useSaveAnalysisWithUrlMutation();
 
 	// react hook form
@@ -71,8 +74,11 @@ export default function SaveUrlForm({}: SaveUrlFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<SaveAnalysisWithUrlDto> = (data) => {
-		saveAnalysis(data);
+	const onSubmit: SubmitHandler<SaveAnalysisWithUrlDto> = async (data) => {
+		try {
+			await saveAnalysis(data);
+			dispatch(setOriginalArgs({ from: 'url', source: data.url }));
+		} catch (error) {}
 	};
 
 	// render

@@ -17,11 +17,14 @@ import {
 	useForm,
 } from 'react-hook-form';
 import Card from '@/components/common/Card';
+import { useAppDispatch } from '@/hooks';
+import { setOriginalArgs } from '@/store/analysis/analysisReducer';
 
 interface SaveFileFormProps {}
 
 export default function SaveFileForm({}: SaveFileFormProps) {
 	// rtk hooks
+	const dispatch = useAppDispatch();
 	const [saveAnalysis] = useSaveAnalysisWithFileMutation();
 
 	// react hooks
@@ -70,13 +73,16 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 	});
 
 	// functions
-	const onSubmit: SubmitHandler<SaveAnalysisWithFileDto> = (data) => {
+	const onSubmit: SubmitHandler<SaveAnalysisWithFileDto> = async (data) => {
 		if (!document) return;
-		saveAnalysis({
-			document,
-			numOfSamples: data.numOfSamples,
-			description: data.description,
-		});
+		try {
+			await saveAnalysis({
+				document,
+				numOfSamples: data.numOfSamples,
+				description: data.description,
+			});
+			dispatch(setOriginalArgs({ from: 'file', document }));
+		} catch (error) {}
 	};
 	const handleDocumentChange = async (
 		event: ChangeEvent<HTMLInputElement>
