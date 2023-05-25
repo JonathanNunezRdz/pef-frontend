@@ -124,6 +124,17 @@ export default function Header() {
 									{link.label}
 								</MenuItem>
 							))}
+							{isLoggedIn && (
+								<MenuItem
+									onClick={() => {
+										dispatch(signOut());
+										dispatch(resetAllApis());
+										handleCloseNavMenu();
+									}}
+								>
+									Cerrar sesión
+								</MenuItem>
+							)}
 							{/* add log out button */}
 						</Menu>
 					</Box>
