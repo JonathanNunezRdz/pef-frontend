@@ -13,7 +13,7 @@ import Card from '@/components/common/Card';
 import { useSaveAnalysisMutation } from '@/store/analysis';
 import { SaveAnalysisDto } from '@/types';
 import RawTextField from '@/components/common/RawTextField';
-import { TextField } from '@mui/material';
+import { TextField, Typography } from '@mui/material';
 
 interface SaveRawTextFormProps {}
 
@@ -22,7 +22,12 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 	const [saveAnalysis] = useSaveAnalysisMutation();
 
 	// react hook form
-	const { control, handleSubmit } = useForm<SaveAnalysisDto>({
+	const {
+		control,
+		handleSubmit,
+		register,
+		formState: { errors },
+	} = useForm<SaveAnalysisDto>({
 		defaultValues: {
 			text: '',
 			numOfSamples: 10,
@@ -36,6 +41,18 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 					type: 'required',
 					message: 'Este campo es obligatorio',
 				};
+			if (values.numOfSamples > 20) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número máximo de muestras es 20',
+				};
+			}
+			if (values.numOfSamples < 1) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número mínimo de muestras es 1',
+				};
+			}
 			return {
 				values: validValues,
 				errors,
@@ -78,6 +95,29 @@ export default function SaveRawTextForm({}: SaveRawTextFormProps) {
 								/>
 							)}
 						/>
+					</Paper>
+					<Paper sx={{ p: 2 }}>
+						<TextField
+							{...register('numOfSamples')}
+							type='number'
+							label='Número de muestras'
+							error={Boolean(errors.numOfSamples)}
+							helperText={
+								errors.numOfSamples &&
+								errors.numOfSamples.message
+							}
+							inputProps={{
+								inputMode: 'numeric',
+								min: 1,
+								max: 20,
+							}}
+							fullWidth
+						/>
+						<Typography mt={1}>
+							Este número se utiliza para el Algoritmo de
+							Fernández Huerta, recomendamos que suba en
+							proporción al tamaño del texto.
+						</Typography>
 					</Paper>
 					<Card
 						sx={{

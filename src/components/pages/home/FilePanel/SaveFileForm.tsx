@@ -29,28 +29,46 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 	const [document, setDocument] = useState<File>();
 
 	// react hook form
-	const { control, handleSubmit, setValue, watch } =
-		useForm<SaveAnalysisWithFileDto>({
-			defaultValues: {
-				numOfSamples: 5,
-				documentLoaded: false,
-				description: '',
-			},
-			resolver: (values) => {
-				const errors: FieldErrors<SaveAnalysisWithFileDto> = {};
-				const validValues: FieldValues = { ...values };
-				if (!values.documentLoaded) {
-					errors.documentLoaded = {
-						type: 'required',
-						message: 'Este campo es obligatorio',
-					};
-				}
-				return {
-					values: validValues,
-					errors,
+	const {
+		control,
+		handleSubmit,
+		setValue,
+		watch,
+		register,
+		formState: { errors },
+	} = useForm<SaveAnalysisWithFileDto>({
+		defaultValues: {
+			numOfSamples: 5,
+			documentLoaded: false,
+			description: '',
+		},
+		resolver: (values) => {
+			const errors: FieldErrors<SaveAnalysisWithFileDto> = {};
+			const validValues: FieldValues = { ...values };
+			if (!values.documentLoaded) {
+				errors.documentLoaded = {
+					type: 'required',
+					message: 'Este campo es obligatorio',
 				};
-			},
-		});
+			}
+			if (values.numOfSamples > 20) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número máximo de muestras es 20',
+				};
+			}
+			if (values.numOfSamples < 1) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número mínimo de muestras es 1',
+				};
+			}
+			return {
+				values: validValues,
+				errors,
+			};
+		},
+	});
 
 	// functions
 	const onSubmit: SubmitHandler<SaveAnalysisWithFileDto> = (data) => {
@@ -125,6 +143,30 @@ export default function SaveFileForm({}: SaveFileFormProps) {
 							</Box>
 						</Paper>
 					)}
+
+					<Paper sx={{ p: 2 }}>
+						<TextField
+							{...register('numOfSamples')}
+							type='number'
+							label='Número de muestras'
+							error={Boolean(errors.numOfSamples)}
+							helperText={
+								errors.numOfSamples &&
+								errors.numOfSamples.message
+							}
+							inputProps={{
+								inputMode: 'numeric',
+								min: 1,
+								max: 20,
+							}}
+							fullWidth
+						/>
+						<Typography mt={1}>
+							Este número se utiliza para el Algoritmo de
+							Fernández Huerta, recomendamos que suba en
+							proporción al tamaño del texto.
+						</Typography>
+					</Paper>
 
 					<Paper sx={{ p: 2 }}>
 						<Controller

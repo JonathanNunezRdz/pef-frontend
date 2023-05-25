@@ -16,6 +16,7 @@ import {
 	useForm,
 } from 'react-hook-form';
 import Card from '@/components/common/Card';
+import { TextField } from '@mui/material';
 
 interface PostFileFormProps {}
 
@@ -27,27 +28,44 @@ export default function PostFileForm({}: PostFileFormProps) {
 	const [document, setDocument] = useState<File>();
 
 	// react hook form
-	const { control, handleSubmit, setValue, watch } =
-		useForm<PostAnalysisWithFileDto>({
-			defaultValues: {
-				numOfSamples: 5,
-				documentLoaded: false,
-			},
-			resolver: (values) => {
-				const errors: FieldErrors<PostAnalysisWithFileDto> = {};
-				const validValues: FieldValues = { ...values };
-				if (!values.documentLoaded) {
-					errors.documentLoaded = {
-						type: 'required',
-						message: 'Este campo es obligatorio',
-					};
-				}
-				return {
-					values: validValues,
-					errors,
+	const {
+		handleSubmit,
+		setValue,
+		watch,
+		register,
+		formState: { errors },
+	} = useForm<PostAnalysisWithFileDto>({
+		defaultValues: {
+			numOfSamples: 5,
+			documentLoaded: false,
+		},
+		resolver: (values) => {
+			const errors: FieldErrors<PostAnalysisWithFileDto> = {};
+			const validValues: FieldValues = { ...values };
+			if (!values.documentLoaded) {
+				errors.documentLoaded = {
+					type: 'required',
+					message: 'Este campo es obligatorio',
 				};
-			},
-		});
+			}
+			if (values.numOfSamples > 20) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número máximo de muestras es 20',
+				};
+			}
+			if (values.numOfSamples < 1) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número mínimo de muestras es 1',
+				};
+			}
+			return {
+				values: validValues,
+				errors,
+			};
+		},
+	});
 
 	// functions
 	const onSubmit: SubmitHandler<PostAnalysisWithFileDto> = (data) => {
@@ -118,6 +136,30 @@ export default function PostFileForm({}: PostFileFormProps) {
 							</Box>
 						</Paper>
 					)}
+
+					<Paper sx={{ p: 2 }}>
+						<TextField
+							{...register('numOfSamples')}
+							type='number'
+							label='Número de muestras'
+							error={Boolean(errors.numOfSamples)}
+							helperText={
+								errors.numOfSamples &&
+								errors.numOfSamples.message
+							}
+							inputProps={{
+								inputMode: 'numeric',
+								min: 1,
+								max: 20,
+							}}
+							fullWidth
+						/>
+						<Typography mt={1}>
+							Este número se utiliza para el Algoritmo de
+							Fernández Huerta, recomendamos que suba en
+							proporción al tamaño del texto.
+						</Typography>
+					</Paper>
 
 					<Card
 						sx={{

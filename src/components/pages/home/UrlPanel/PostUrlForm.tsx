@@ -25,7 +25,12 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 	const [postAnalysisWithUrl] = useAddAnalysisWithUrlMutation();
 
 	// react-hook-form
-	const { control, handleSubmit } = useForm<PostAnalysisWithUrlDto>({
+	const {
+		control,
+		handleSubmit,
+		register,
+		formState: { errors },
+	} = useForm<PostAnalysisWithUrlDto>({
 		defaultValues: {
 			url: '',
 			numOfSamples: 5,
@@ -43,6 +48,18 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 				errors.url = {
 					type: 'pattern',
 					message: 'Este enlace no es válido',
+				};
+			}
+			if (values.numOfSamples > 20) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número máximo de muestras es 20',
+				};
+			}
+			if (values.numOfSamples < 1) {
+				errors.numOfSamples = {
+					type: 'invalid',
+					message: 'El número mínimo de muestras es 1',
 				};
 			}
 			return {
@@ -65,12 +82,6 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 			<form onSubmit={handleSubmit(onSubmit)}>
 				<Stack spacing={2}>
 					<Paper sx={{ p: 2 }}>
-						<Box mb={2}>
-							<Typography>
-								*Recuerda que esta herramienta solo realiza
-								análisis en sitios en español.
-							</Typography>
-						</Box>
 						<Controller
 							control={control}
 							name='url'
@@ -95,7 +106,38 @@ export default function PostUrlForm({}: PostUrlFormProps) {
 								/>
 							)}
 						/>
+						<Box mt={1}>
+							<Typography>
+								*Recuerda que esta herramienta solo realiza
+								análisis en sitios en español.
+							</Typography>
+						</Box>
 					</Paper>
+
+					<Paper sx={{ p: 2 }}>
+						<TextField
+							{...register('numOfSamples')}
+							type='number'
+							label='Número de muestras'
+							error={Boolean(errors.numOfSamples)}
+							helperText={
+								errors.numOfSamples &&
+								errors.numOfSamples.message
+							}
+							inputProps={{
+								inputMode: 'numeric',
+								min: 1,
+								max: 20,
+							}}
+							fullWidth
+						/>
+						<Typography mt={1}>
+							Este número se utiliza para el Algoritmo de
+							Fernández Huerta, recomendamos que suba en
+							proporción al tamaño del texto.
+						</Typography>
+					</Paper>
+
 					<Card
 						sx={{
 							flexDirection: 'row-reverse',

@@ -54,9 +54,9 @@ export const analysisApi = baseApi.injectEndpoints({
 			PostAnalysisWithFileThunk
 		>({
 			query(body) {
-				const { document } = body;
+				const { document, numOfSamples } = body;
 				const bodyFormData = new FormData();
-				// bodyFormData.append('numOfSamples', numOfSamples.toString());
+				bodyFormData.append('numOfSamples', numOfSamples.toString());
 				bodyFormData.append('document', document);
 				return {
 					url: `analysis/file`,
@@ -70,11 +70,13 @@ export const analysisApi = baseApi.injectEndpoints({
 			SaveAnalysisWithFileThunk
 		>({
 			query(body) {
-				const { document, description } = body;
+				const { document, description, numOfSamples } = body;
 				const bodyFormData = new FormData();
 				bodyFormData.append('document', document);
 				if (description)
 					bodyFormData.append('description', description);
+				bodyFormData.append('numOfSamples', numOfSamples.toString());
+				console.log(bodyFormData.entries);
 				return {
 					url: 'analysis/save/file',
 					method: 'POST',

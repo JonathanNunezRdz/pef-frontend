@@ -1,4 +1,4 @@
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class PostAnalysisDto {
 	@IsString()
@@ -6,6 +6,7 @@ export class PostAnalysisDto {
 
 	@IsInt()
 	@Min(1)
+	@Max(20)
 	@IsOptional()
 	numOfSamples: number;
 }
@@ -40,8 +41,9 @@ export class PostAnalysisWithUrlDto {
 
 	@IsInt()
 	@Min(1)
+	@Max(20)
 	@IsOptional()
-	numOfSamples?: number;
+	numOfSamples: number;
 }
 
 export class SaveAnalysisWithUrlDto extends PostAnalysisWithUrlDto {

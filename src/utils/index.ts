@@ -201,7 +201,7 @@ export const ALGORITHM_NAMES: Record<
 		],
 	},
 
-	'Algoritmo UDEM': {
+	UDEM: {
 		forms: [
 			{
 				displayFormula: 'L = (RF*2)+(RG*1)+(RS*2.5)+(RI*3)+(R\\mu*2)',
