@@ -8,15 +8,11 @@ Importantes:
 [x] Eliminar un resultado
 [x] Llenar informacion de "¿Como funciona?"
 
-[] Paginacion
-[] Editar cuenta: nombre, apellido, contraseña
-
-[] Quitar color en la barra de crawford
-[] Usar las mismas barras en los resultados de analisis
-[] Agregar la opcion de mostrar minimos y maximos en la barra
+[x] Paginacion
+[x] Editar cuenta: nombre, apellido, contraseña
 
 No tan importantes:
 
-[] Visualizar detalles de un resultado
-[] Animacion de puntajes de resultado
-[] Estandarizar el uso de numOfSamples en backend
+[x] Visualizar detalles de un resultado
+[x] Animacion de puntajes de resultado
+[x] Estandarizar el uso de numOfSamples en backend
