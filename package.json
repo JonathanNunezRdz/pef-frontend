@@ -3,9 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev",
-		"build": "next build",
-		"start": "next start",
+		"dev": "dotenv -e .env.${npm_config_env} -- next dev",
+		"build": "dotenv -e .env.${npm_config_env} -- next build",
+		"start": "dotenv -e .env.${npm_config_env} -- next start",
 		"lint": "next lint"
 	},
 	"dependencies": {
@@ -39,6 +39,8 @@
 	},
 	"devDependencies": {
 		"@types/lodash.union": "^4.6.7",
+		"dotenv": "^16.1.0",
+		"dotenv-cli": "^7.2.1",
 		"prettier": "^2.8.3"
 	}
 }
